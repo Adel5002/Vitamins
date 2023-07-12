@@ -27,9 +27,22 @@ class Category(models.Model):
         self.slug = slugify(self.name)
         super(Category, self).save(*args, **kwargs)
 
+    def __str__(self):
+        return self.name
+
+    class Meta:
+        verbose_name_plural = 'Категории'
+
 
 class Vendor(models.Model):
     name = models.CharField()
+
+    def __str__(self):
+        return self.name
+
+    class Meta:
+        verbose_name_plural = 'Производитель'
+
 
 
 class Product(models.Model):
@@ -46,12 +59,14 @@ class Product(models.Model):
     title = models.CharField(max_length=120)
     description = models.TextField(null=True, blank=True)
     dateCreation = models.DateTimeField(auto_now_add=True)
+    updated = models.DateTimeField(null=True, blank=True)
     slug = models.SlugField(unique=True, db_index=True)
     specifications = models.TextField()
     is_available = models.BooleanField(default=True)
     status = models.BooleanField(default=True)
     featured = models.BooleanField(default=False)
     digital = models.BooleanField(default=False)
+    quantity = models.PositiveIntegerField(default=1, null=True, blank=True)
 
     def save(self, *args, **kwargs):
         self.slug = slugify(self.title)
@@ -59,6 +74,23 @@ class Product(models.Model):
 
     class Meta:
         ordering = ['dateCreation']
+        verbose_name_plural = 'Добавление продукта'
+
+    def get_percentage(self):
+        new_price = (self.price / self.old_price) * 100
+        return new_price
+
+    def __str__(self):
+        return self.title
+
+
+class ProductImage(models.Model):
+    images = models.ImageField(upload_to='product_images/')
+    product = models.ForeignKey(Product, on_delete=models.SET_NULL, null=True)
+    date = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        verbose_name_plural = 'Кратинки к продукту'
 
 
 class Comment(models.Model):
@@ -66,8 +98,70 @@ class Comment(models.Model):
     body = models.TextField()
     commentator = models.ForeignKey(User, on_delete=models.CASCADE)
     dateCreation = models.DateTimeField(auto_now_add=True)
+    rating = models.IntegerField(choices=RATING, default=None)
+
+    class Meta:
+        verbose_name_plural = 'Комментарии к продукту'
+
+    def __str__(self):
+        return self.product.title
+
+    def get_rating(self):
+        return self.rating
 
 
-class Order(models.Model):
-    product = models.ManyToManyField(Product)
-    customer = models.ForeignKey(User, on_delete=models.CASCADE)
+
+
+
+
+
+class CartOrder(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    first_name = models.CharField(max_length=50)
+    last_name = models.CharField(max_length=50)
+    email = models.EmailField()
+    address = models.CharField(max_length=250)
+    postal_code = models.CharField(max_length=20)
+    city = models.CharField(max_length=100)
+    created = models.DateTimeField(auto_now_add=True)
+    updated = models.DateTimeField(auto_now=True)
+    paid = models.BooleanField(default=False)
+
+    class Meta:
+        verbose_name = 'Заказ'
+        verbose_name_plural = 'Заказы'
+
+    def __str__(self):
+        return f'{self.first_name}-{self.last_name}'
+
+    def get_total_cost(self):
+        orderitems = self.cardorderitem_set.all()
+        total = sum([item.get_total for item in orderitems])
+        return total
+
+    def get_cart_item(self):
+        orderitems = self.cardorderitem_set.all()
+        total = sum([item.qty for item in orderitems])
+        return total
+
+
+
+class CartOrderItem(models.Model):
+    order = models.ForeignKey(CartOrder, on_delete=models.SET_NULL, null=True)
+    product = models.ForeignKey(Product, on_delete=models.SET_NULL, null=True)
+    qty = models.PositiveIntegerField(default=1)
+    date_added = models.DateTimeField(auto_now_add=True)
+
+    def get_cost(self):
+        return self.product.price * self.qty
+
+    def __str__(self):
+        return self.id
+
+
+
+
+
+
+
+
