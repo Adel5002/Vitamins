@@ -6,3 +6,134 @@
     border: none;
     background: rgba(0, 0, 0, 0)
 }
+
+
+
+.product-inner-box img {
+    box-shadow: 0 33px 61px -29px rgb(0 0 0 / 26%);
+    height: 320px;
+    width: 100%;
+    object-fit: cover;
+    transition: transform 0.5s;
+}
+
+.product-inner-box:hover img {
+    transform: scale(1.1);
+}
+
+.cart-btn {
+    position: relative;
+    bottom: 40px;
+    text-align: center;
+    width: 100%;
+    opacity: 0;
+    transition: all 0.2s ease-in-out, transform 0.2s ease-in-out, opacity 0.2s ease-in-out;
+}
+
+.cart-btn.is-hover{
+    opacity: 1;
+}
+
+.search {
+    position: relative;
+    width: 35px;
+    height: 35px;
+    overflow: hidden;
+    background: #fff;
+    border-radius: 35px;
+    transition: 0.5s;
+    box-shadow: 0px 0px 5px 1px #828589;
+}
+
+.icon {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 35px;
+    height: 35px;
+    background: #fff;
+    border-radius: 35px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 999;
+    cursor: pointer;
+}
+
+.icon::before {
+    position: absolute;
+    content: '';
+    width: 13px;
+    height: 13px;
+    border: 2px solid #287dfc;
+    border-radius: 50%;
+    transform: translate(-2px, -2px);
+}
+
+.icon::after {
+    position: absolute;
+    content: '';
+    width: 3px;
+    height: 7.4px;
+    background: #287dfc;
+    transform: translate(4px, 4px) rotate(-45deg);
+
+}
+
+.search.active {
+    width: 280px;
+
+}
+
+.input {
+    position: relative;
+    width: 220px;
+    height: 30px;
+    left: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.input input  {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 210px;
+    height: 100%;
+    border: 0;
+    outline: 0;
+    font-size: 15px;
+    padding: 15px 0;
+}
+
+.clear {
+    position: absolute;
+    top: 50%;
+    left: 255px;
+    width: 15px;
+    height: 15px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transform: translateY(-50%);
+}
+
+.clear::before {
+    position: absolute;
+    content: '';
+    width: 1px;
+    height: 15px;
+    background: #999;
+    transform: rotate(45deg);
+}
+
+.clear::after {
+    position: absolute;
+    content: '';
+    width: 1px;
+    height: 15px;
+    background: #999;
+    transform: rotate(-45deg);
+}

@@ -1,6 +1,9 @@
 from django.utils.text import slugify
 from django.db import models
 from django.contrib.auth.models import User
+from django.shortcuts import reverse
+
+from unidecode import unidecode
 
 
 STATUS_CHOICE = (
@@ -24,7 +27,9 @@ class Category(models.Model):
     slug = models.SlugField(unique=True, db_index=True)
 
     def save(self, *args, **kwargs):
-        self.slug = slugify(self.name)
+        self.slug = slugify(unidecode(self.name))
+        print(f'{self.slug = }')
+        print(f'{self.name = }')
         super(Category, self).save(*args, **kwargs)
 
     def __str__(self):
@@ -35,7 +40,7 @@ class Category(models.Model):
 
 
 class Vendor(models.Model):
-    name = models.CharField()
+    name = models.CharField(max_length=120)
 
     def __str__(self):
         return self.name
@@ -69,8 +74,12 @@ class Product(models.Model):
     quantity = models.PositiveIntegerField(default=1, null=True, blank=True)
 
     def save(self, *args, **kwargs):
-        self.slug = slugify(self.title)
+        self.slug = slugify(unidecode(self.title))
         super(Product, self).save(*args, **kwargs)
+
+    def get_absolute_url(self):
+        return reverse('product_details', kwargs={'slug': self.slug})
+
 
     class Meta:
         ordering = ['dateCreation']
