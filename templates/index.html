@@ -8,7 +8,7 @@
         <div class="col-md-3">
             <div class="product-box mt-5">
             <div class="product-inner-box position-relative">
-                <a href="{% url 'product_details' product.slug %}"><img src="{{ product.image.url }}" class="image-fluid" alt=""></a>
+                <a href="{{ product.get_absolute_url }}"><img src="{{ product.image.url }}" class="image-fluid" alt=""></a>
                 <div class="cart-btn">
                     <button class="btn bg-white shadow-sm rounded-pill">Добавить в корзину</button>
                 </div>

@@ -2,5 +2,66 @@
 
 
 {% block content %}
-<h1>{{ products.title }}</h1>
+<div class="container">
+    <div class="row product-main-info mt-3 pt-5 pb-5">
+        <div class="col-3 ms-5">
+            <img class="product-detail-img" src="{{ product.image.url }}" alt="">
+        </div>
+        <div class="col-4 mt-5">
+            <h1>{{ product.title }}</h1>
+
+            <div class="main-information mt-5">
+                <p>Производитель:&nbsp;<strong> {{ product.vendor }}</strong></p>
+                <p>Форма выпуска::&nbsp;<strong> {{ product.release_form }}</strong></p>
+                <p>Возраст от:&nbsp;<strong> {{ product.age }}+</strong></p>
+                <p>Страна выпуска:&nbsp;<strong> {{ product.country }}</strong></p>
+            </div>
+        </div>
+        <div class="col-3 ">
+            <div class="price ms-5 mt-5">
+                {% if product.old_price %}
+                    <p>Цена:</p>
+                    <p><s>{{ product.old_price }} ₽</s></p>
+                    <strong>{{ product.price }} ₽</strong>
+                {% else %}
+                    <strong>{{ product.price }} ₽</strong>
+                {% endif %}
+                <hr>
+                <div class="mt-3 d-grid gap-2">
+                    <button class="btn btn-success" type="button">Купить</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row product-main-info  pt-5 pb-5 mt-5">
+        <div class="col">
+            <button id="descr-btn" class="btn btn-outline-dark ms-5">Описание</button>
+            <button id="specifications-btn" class="btn btn-outline-dark ms-5">Состав</button>
+            <button id="comments-btn" class="btn btn-outline-dark ms-5">Комментарии  ({{ product.comment_set.all.count }})</button>
+            <div id="descr-block" class="product-descr mt-5 ms-5">
+                <p>{{ product.description }}</p>
+            </div>
+            <div id="struc-block" class="product-struc mt-5 ms-5" style="display: none;">
+                <p>{{ product.specifications }}</p>
+            </div>
+            <div id="comments-block" class="product-comments mt-5 ms-5" style="display: none;">
+                <a class="btn btn-primary" href="{% url 'add_comment' product.slug %}">Добавить коммнетарий</a>
+                <div class="product-rating mt-5">
+                    <h5>Средний балл: {{ avg_rating.rating|floatformat }} из 5.0</h5>
+
+                </div>
+                <div class="pb-5">
+                    {% for comment in product.comment_set.all %}
+
+                    <div>
+                      <div class="comment-header mt-4 mb-3">commentator · <strong style="color: #000000;">{{ comment.commentator }}</strong> | date · <strong style="color: #000000;">{{ comment.dateCreation}} {{ comment.get_rating_display }}</strong></div>
+                    </div>
+
+                    <p class="">{{ comment.body }}</p>
+                {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 {% endblock %}
