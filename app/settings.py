@@ -50,6 +50,9 @@ INSTALLED_APPS = [
     #allauth-styles
     'crispy_forms',
     'crispy_bootstrap5',
+
+    #font-awesome
+    'fontawesomefree',
 ]
 
 SITE_ID = 1
@@ -162,3 +165,5 @@ STATICFILES_DIRS = [
 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_URL = '/media/'
+
+CART_SESSION_ID = 'cart'

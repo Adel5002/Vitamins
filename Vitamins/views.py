@@ -1,16 +1,26 @@
 from django.views.generic import DetailView, ListView, CreateView
 from django.urls import reverse
+from django.views.decorators.http import require_POST
 from django.db.models import Count, Avg
-from django.shortcuts import get_object_or_404
+from django.shortcuts import get_object_or_404, redirect, render
 
+from .cart import Cart
 from .models import Product, Comment
-from .forms import CommentForm
+from .forms import CommentForm, CartAddProductForm
 
 
 class ProdictList(ListView):
     model = Product
     template_name = 'index.html'
     context_object_name = 'products'
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super().get_context_data(**kwargs)
+
+        cart_product_form = CartAddProductForm()
+
+        context['cart_product_form'] = cart_product_form
+        return context
 
 
 
@@ -41,3 +51,28 @@ class AddComment(CreateView):
     def get_success_url(self):
         return reverse('product_details', kwargs={'slug': self.object.product.slug})
 
+
+
+@require_POST
+def cart_add(request, product_slug):
+    cart = Cart(request)
+    product = get_object_or_404(Product, slug=product_slug)
+    form = CartAddProductForm(request.POST)
+    if form.is_valid():
+        cd = form.cleaned_data
+        cart.add(product=product,
+                 quantity=cd['quantity'],
+                 update_quantity=cd['update'])
+    return redirect('cart_detail')
+
+
+def cart_remove(request, product_slug):
+    cart = Cart(request)
+    product = get_object_or_404(Product, slug=product_slug)
+    cart.remove(product)
+    return redirect('cart_detail')
+
+
+def cart_detail(request):
+    cart = Cart(request)
+    return render(request, 'cart/detail.html', {'cart': cart})

@@ -10,7 +10,9 @@
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500&display=swap" rel="stylesheet">
+    <link href="{% static 'fontawesomefree/css/fontawesome.css' %}" rel="stylesheet" type="text/css">
+    <link href="{% static 'fontawesomefree/css/brands.css' %}" rel="stylesheet" type="text/css">
+    <link href="{% static 'fontawesomefree/css/solid.css' %}" rel="stylesheet" type="text/css">
     <title>{% block title %}{% endblock %}</title>
 </head>
 <body>
@@ -27,6 +29,7 @@
                     <ul class="navbar-nav ms-auto mb-2">
                         <li class="nav-item">
                             <a href="{% url 'main' %}" class="nav-link">Домашняя</a>
+
                         </li>
                         <li class="nav-item">
                             <a href="#" class="nav-link">О нас</a>
@@ -50,6 +53,7 @@
                           {% if redirect_field_value %}
                           <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}"/>
                           {% endif %}
+
                           {{ user.username }} | <button class="nav-item sign-out" type="submit">Выход</button>
                         </form>
                     {% else %}
@@ -60,6 +64,9 @@
                         <a href="{% url 'account_signup' %}" class="btn btn-outline-dark">Регистрация</a>
                       </li>
                     {% endif %}
+                        <li class="ms-3">
+                            <a style="color: black;" href="{% url 'cart_detail' %}"><i class="fa-solid fa-cart-shopping"></i></a>
+                        </li>
                     </ul>
                 </div>
             </div>
