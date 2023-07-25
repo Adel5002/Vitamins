@@ -1,4 +1,5 @@
 from django import forms
+from django.core.validators import MinValueValidator
 
 from .models import Comment
 
@@ -20,4 +21,15 @@ class CartAddProductForm(forms.Form):
     quantity = forms.TypedChoiceField(choices=PRODUCT_QUANTITY_CHOICES, coerce=int)
     update = forms.BooleanField(required=False, initial=False, widget=forms.HiddenInput)
 
+
+class CartSubtractProductForm(forms.Form):
+    quantity = forms.IntegerField(
+        label='Quantity',
+        validators=[MinValueValidator(1)]
+    )
+    update = forms.BooleanField(
+        required=False,
+        initial=False,
+        widget=forms.HiddenInput
+    )
 

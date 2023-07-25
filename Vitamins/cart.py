@@ -37,6 +37,17 @@ class Cart(object):
         # Отметить сеанс как "измененный", чтобы убедиться, что он сохранен
         self.session.modified = True
 
+    def subtract(self, product, quantity=1, update_quantity=False):
+
+        product_slug = str(product.slug)
+        if product_slug in self.cart:
+            if update_quantity:
+                self.cart[product_slug]['quantity'] = quantity
+            else:
+                if self.cart[product_slug]['quantity'] - quantity > 0:
+                    self.cart[product_slug]['quantity'] -= quantity
+            self.save()
+
     def remove(self, product):
         """
         Удаление товара из корзины.

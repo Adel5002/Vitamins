@@ -29,7 +29,20 @@
                                     </a>
                                 </td>
                                 <td class="pt-5">{{ product.title }}</td>
-                                <td class="pt-5">{{ item.quantity }} </td>
+                                <td class="pt-5">
+                                    <form action="{% url 'cart_update' product.slug %}" method="POST">
+                                        {% csrf_token %}
+                                        <input type="hidden" name="quantity" value="1">
+                                        <button type="submit" class="btn btn-link p-0 text-info"><i class="fas fa-plus"></i></button>
+                                    </form>
+                                    {{ item.quantity }}
+                                    <form action="{% url 'cart_subtract' product.slug %}" method="POST">
+                                        {% csrf_token %}
+                                        <input type="hidden" name="update" value="True">
+                                        <input type="hidden" name="quantity" value="1">
+                                        <button type="submit" class="btn btn-link p-0 text-info"><i class="fas fa-minus"></i></button>
+                                    </form>
+                                </td>
                                 <td class="pt-5"><a href="{% url 'cart_remove' product.slug %}">Убрать</a></td>
                                 <td class="num pt-5">₽{{ item.price }}</td>
                                 <td class="num pt-5">₽{{ item.total_price }}</td>

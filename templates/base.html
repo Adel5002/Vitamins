@@ -27,10 +27,17 @@
                 </button>
                 <div class="collapse navbar-collapse" id="navbarContent">
                     <ul class="navbar-nav ms-auto mb-2">
-                        <li class="nav-item">
-                            <a href="{% url 'main' %}" class="nav-link">Домашняя</a>
-
-                        </li>
+                    <li class="nav-item dropdown">
+                    <li class="nav-item dropdown">
+                              <a class="nav-link dropdown-toggle" href="#" id="navbarDarkDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                Категории
+                              </a>
+                              <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="navbarDarkDropdownMenuLink">
+                                  {% for category in categories %}
+                                        <li><a class="dropdown-item" href="{% url 'category_products' category.slug %}">{{ category.name }}</a></li>
+                                  {% endfor %}
+                              </ul>
+                            </li>
                         <li class="nav-item">
                             <a href="#" class="nav-link">О нас</a>
                         </li>
