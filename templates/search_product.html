@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container">
+
+    <div class="row mt-5">
+        {% for product in products %}
+        <div class="col-2 mb-3">
+            <div class="searched-product-img">
+                <a href="{{ product.get_absolute_url }}"><img class="searched-img" src="{{ product.image.url }}" alt=""></a>
+            </div>
+        </div>
+        <div class="col-7">
+            <h3 class="searched-title mt-4">{{ product.title }}</h3>
+            <div class="main-information mt-3">
+                <p>Производитель:&nbsp;<strong> {{ product.vendor }}</strong></p>
+                <p>Форма выпуска::&nbsp;<strong> {{ product.release_form }}</strong></p>
+                <p>Возраст от:&nbsp;<strong> {{ product.age }}+</strong></p>
+                <p>Страна выпуска:&nbsp;<strong> {{ product.country }}</strong></p>
+            </div>
+        </div>
+        <div class="col-2">
+            <div class="price mt-5">
+                {% if product.old_price %}
+
+                    <p><s>{{ product.old_price }} ₽</s></p>
+                    <strong>{{ product.price }} ₽  &nbsp; - {{ product.get_percentage|floatformat:"0"  }} % </strong>
+                {% else %}
+                    <strong>{{ product.price }} ₽</strong>
+                {% endif %}
+                <hr>
+                    <form action="{% url 'cart_add' product.slug %}" method="post">
+                        {% csrf_token %}
+                        {{ cart_product_form.update }}
+                        <div style="display: none;">{{ cart_product_form.quantity }}</div>
+                        <div class="mt-3 d-grid gap-2">
+                            <button class="btn btn-success">Добавить в корзину</button>
+                        </div>
+                    </form>
+            </div>
+        </div>
+        <hr>
+            {% endfor %}
+    </div>
+</div>
+
+{% endblock %}

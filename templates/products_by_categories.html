@@ -1,7 +1,35 @@
 {% extends 'base.html' %}
 
 {% block content %}
-    {% for product in products %}
-        <h1>{{ product.title }}</h1>
-    {% endfor %}
+<div class="container">
+    <div class="row">
+        {% for product in products %}
+
+        <div class="col-md-3">
+            <div class="product-box mt-5">
+            <div class="product-inner-box position-relative">
+                <a href="{{ product.get_absolute_url }}"><img src="{{ product.image.url }}" class="image-fluid" alt=""></a>
+                <form action="{% url 'cart_add' product.slug %}" method="post">
+                    {% csrf_token %}
+                    {{ cart_product_form.update }}
+                    <div style="display: none;">{{ cart_product_form.quantity }}</div>
+                    <div class="cart-btn">
+                        <button class="btn bg-white shadow-sm rounded-pill">Добавить в корзину</button>
+                    </div>
+                </form>
+                <div class="product-info">
+                    <div class="product_name">
+                        <h3>{{ product.title }}</h3>
+                    </div>
+                    <div class="product-price">
+                        ₽<span>{{ product.price }}</span>
+                    </div>
+                </div>
+            </div>
+
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
 {% endblock %}

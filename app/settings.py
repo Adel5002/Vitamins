@@ -53,6 +53,9 @@ INSTALLED_APPS = [
 
     #font-awesome
     'fontawesomefree',
+
+    # django-filters
+    'django_filters',
 ]
 
 SITE_ID = 1

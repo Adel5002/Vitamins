@@ -42,12 +42,21 @@
                 <p>{{ product.description }}</p>
             </div>
             <div id="struc-block" class="product-struc mt-5 ms-5" style="display: none;">
-                <p>{{ product.specifications }}</p>
+                <h3>Состав:</h3>
+                <div><p>{{ product.specifications|linebreaks }}</p></div>
             </div>
             <div id="comments-block" class="product-comments mt-5 ms-5" style="display: none;">
+                {% if user.is_authenticated %}
                 <a class="btn btn-primary" href="{% url 'add_comment' product.slug %}">Добавить коммнетарий</a>
+                {% else %}
+                Пожалуйста <a href="{% url 'account_login'%}">войдите</a> чтобы добавить комментарий...
+                {% endif %}
                 <div class="product-rating mt-5">
+                    {% if avg_rating.rating %}
                     <h5>Средний балл: {{ avg_rating.rating|floatformat }} из 5.0</h5>
+                    {% else %}
+                    <h5>Средний балл: 0 из 5.0, так как оценок еще нет</h5>
+                    {% endif %}
 
                 </div>
                 <div class="pb-5">

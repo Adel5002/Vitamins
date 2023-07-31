@@ -1,7 +1,7 @@
-from django.views.generic import DetailView, ListView, CreateView
+from django.views.generic import DetailView, ListView, CreateView, TemplateView
 from django.urls import reverse
-from django.views.decorators.http import require_POST, require_GET
-from django.db.models import Count, Avg
+from django.views.decorators.http import require_POST
+from django.db.models import Avg
 from django.shortcuts import get_object_or_404, redirect, render
 
 from .cart import Cart
@@ -14,10 +14,16 @@ class ProdictList(ListView):
     template_name = 'index.html'
     context_object_name = 'products'
 
+    # def get_queryset(self):
+    #     self.filter = ProductFilter(self.request.GET, queryset=Product.objects.all())
+    #
+    #     return self.filter.qs
+
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
-
         cart_product_form = CartAddProductForm()
+
+        # context['filter'] = self.filter
         context['cart_product_form'] = cart_product_form
         return context
 
@@ -46,6 +52,35 @@ class CategoryListView(ListView):
         slug = self.kwargs['slug']
         category = get_object_or_404(Category, slug=slug)
         return Product.objects.filter(categories=category)
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super().get_context_data(**kwargs)
+
+        cart_product_form = CartAddProductForm()
+        context['cart_product_form'] = cart_product_form
+        return context
+
+
+class SearchProducts(ListView):
+    model = Product
+    template_name = 'search_product.html'
+    context_object_name = 'products'
+
+    def get_queryset(self):
+        query = self.request.GET.get('q')
+        object_list = Product.objects.filter(title__iregex=query)
+        return object_list
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super().get_context_data(**kwargs)
+        cart_product_form = CartAddProductForm()
+
+        context['cart_product_form'] = cart_product_form
+        return context
+
+
+class AboutUs(TemplateView):
+    template_name = 'about_us.html'
 
 
 class AddComment(CreateView):
