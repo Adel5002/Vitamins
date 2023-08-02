@@ -2,10 +2,10 @@
 
 {% block content %}
 <div class="container">
-    <div class="row">
+    <div class="row infinite-container">
         {% for product in products %}
 
-        <div class="col-md-3">
+        <div class="col-md-3 infinite-item">
             <div class="product-box mt-5">
             <div class="product-inner-box position-relative">
                 <a href="{{ product.get_absolute_url }}"><img src="{{ product.image.url }}" class="image-fluid" alt=""></a>
@@ -31,5 +31,6 @@
         </div>
         {% endfor %}
     </div>
+    {% include 'infinite_scroll.html' %}
 </div>
 {% endblock %}

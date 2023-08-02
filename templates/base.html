@@ -13,6 +13,7 @@
     <link href="{% static 'fontawesomefree/css/fontawesome.css' %}" rel="stylesheet" type="text/css">
     <link href="{% static 'fontawesomefree/css/brands.css' %}" rel="stylesheet" type="text/css">
     <link href="{% static 'fontawesomefree/css/solid.css' %}" rel="stylesheet" type="text/css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
     <title>{% block title %}{% endblock %}</title>
 </head>
 <body>
@@ -52,7 +53,7 @@
                             <div class="search">
                             <div class="icon"></div>
                                 <div class="input">
-                                    <input name="q" type="text"  placeholder="Поиск" id="mySearch">
+                                    <input name="title" type="text"  placeholder="Поиск" id="mySearch">
                                 </div>
                                 <span class="clear"></span>
                         </div>
@@ -86,6 +87,25 @@
 {% endblock %}
 
 {% block content %}{% endblock %}
+
+
+<script src="{% static 'js/jquery.waypoints.min.js' %}"></script>
+<script src="{% static 'js/infinite.min.js' %}"></script>
+<script>
+        var infinite = new Waypoint.Infinite({
+            element: $('.infinite-container')[0],
+
+            offset: 'bottom-in-view',
+
+            onBeforePageLoad: function () {
+                $('.loading').show();
+            },
+            onAfterPageLoad: function () {
+                $('.loading').hide();
+            }
+
+        });
+</script>
 
 <script src="{% static 'js/script.js' %}"></script>
 <script src="{% static 'js/prod_details.js' %}"></script>

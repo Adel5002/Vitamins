@@ -3,14 +3,14 @@
 {% block content %}
 <div class="container">
 
-    <div class="row mt-5">
+    <div class="row mt-5 infinite-container">
         {% for product in products %}
-        <div class="col-2 mb-3">
+        <div class="col-2 mb-3 infinite-item">
             <div class="searched-product-img">
                 <a href="{{ product.get_absolute_url }}"><img class="searched-img" src="{{ product.image.url }}" alt=""></a>
             </div>
         </div>
-        <div class="col-7">
+        <div class="col-7 infinite-item">
             <h3 class="searched-title mt-4">{{ product.title }}</h3>
             <div class="main-information mt-3">
                 <p>Производитель:&nbsp;<strong> {{ product.vendor }}</strong></p>
@@ -19,7 +19,7 @@
                 <p>Страна выпуска:&nbsp;<strong> {{ product.country }}</strong></p>
             </div>
         </div>
-        <div class="col-2">
+        <div class="col-2 infinite-item">
             <div class="price mt-5">
                 {% if product.old_price %}
 
@@ -41,6 +41,13 @@
         </div>
         <hr>
             {% endfor %}
+    </div>
+        <div class="row">
+        <div class="col-12">
+            {% if page_obj.has_next %}
+            <a class="infinite-more-link" href="?{{ search_params }}&page={{ page_obj.next_page_number }}">next</a>
+            {% endif %}
+        </div>
     </div>
 </div>
 

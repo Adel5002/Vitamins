@@ -3,7 +3,7 @@
 
 {% block content %}
 <div class="container">
-    <div class="row product-main-info mt-3 pt-5 pb-5">
+    <div class="row product-main-info mt-3 pt-5 pb-5 ">
         <div class="col-3 ms-5">
             <img class="product-detail-img" src="{{ product.image.url }}" alt="">
         </div>
@@ -28,12 +28,19 @@
                 {% endif %}
                 <hr>
                 <div class="mt-3 d-grid gap-2">
-                    <button class="btn btn-success" type="button">Купить</button>
+                    <form action="{% url 'cart_add' product.slug %}" method="post">
+                        {% csrf_token %}
+                        {{ cart_product_form.update }}
+                        <div style="display: none;">{{ cart_product_form.quantity }}</div>
+                        <div class="mt-3 d-grid gap-2">
+                            <button class="btn btn-success">Добавить в корзину</button>
+                        </div>
+                    </form>
                 </div>
             </div>
         </div>
     </div>
-    <div class="row product-main-info  pt-5 pb-5 mt-5">
+    <div class="row product-main-info  pt-5 pb-5 mt-5 ">
         <div class="col">
             <button id="descr-btn" class="btn btn-outline-dark ms-5">Описание</button>
             <button id="specifications-btn" class="btn btn-outline-dark ms-5">Состав</button>
@@ -45,7 +52,7 @@
                 <h3>Состав:</h3>
                 <div><p>{{ product.specifications|linebreaks }}</p></div>
             </div>
-            <div id="comments-block" class="product-comments mt-5 ms-5" style="display: none;">
+            <div id="comments-block" class="product-comments mt-5 ms-5 infinite-container" style="display: none;">
                 {% if user.is_authenticated %}
                 <a class="btn btn-primary" href="{% url 'add_comment' product.slug %}">Добавить коммнетарий</a>
                 {% else %}
@@ -59,15 +66,21 @@
                     {% endif %}
 
                 </div>
-                <div class="pb-5">
-                    {% for comment in product.comment_set.all %}
+                <div class="pb-5 infinite-item">
+                    {% for comment in comments %}
 
-                    <div>
+                    <div class="">
                       <div class="comment-header mt-4 mb-3">commentator · <strong style="color: #000000;">{{ comment.commentator }}</strong> | date · <strong style="color: #000000;">{{ comment.dateCreation}} {{ comment.get_rating_display }}</strong></div>
+                      <p class="">{{ comment.body }}</p>
                     </div>
 
-                    <p class="">{{ comment.body }}</p>
-                {% endfor %}
+
+                    {% endfor %}
+                    <div class="col-12">
+                        {% if comments.has_next %}
+                        <a class="infinite-more-link" href="?page={{ comments.next_page_number }}"></a>
+                        {% endif %}
+                    </div>
                 </div>
             </div>
         </div>
