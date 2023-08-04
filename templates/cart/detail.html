@@ -57,7 +57,8 @@
                     </tbody>
                 </table>
                 <p class="mt-3">
-                    <a href="#" class="float-end btn btn-primary ms-3">Оплатить</a>
+
+                    <a href="{% url 'order_create' %}" class="float-end btn btn-primary ms-3">Checkout</a>
                     <a href="{% url 'main' %}" class="float-end btn btn-primary">Продолжить шоппинг</a>
                 </p>
         {% else %}

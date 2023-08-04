@@ -8,8 +8,8 @@ from django.http import QueryDict
 
 
 from .cart import Cart
-from .models import Product, Comment, Category
-from .forms import CommentForm, CartAddProductForm, CartSubtractProductForm
+from .models import Product, Comment, Category, CartOrderItem
+from .forms import CommentForm, CartAddProductForm, CartSubtractProductForm, OrderCreateForm
 
 
 
@@ -156,3 +156,25 @@ def cart_remove(request, product_slug):
 def cart_detail(request):
     cart = Cart(request)
     return render(request, 'cart/detail.html', {'cart': cart})
+
+
+def order_create(request):
+    cart = Cart(request)
+    if request.method == 'POST':
+        form = OrderCreateForm(request.POST)
+        if form.is_valid():
+            order = form.save()
+            for item in cart:
+                CartOrderItem.objects.create(order=order,
+                                         product=item['product'],
+                                         price=item['price'],
+                                         qty=item['quantity'])
+
+            # очистка корзины
+            cart.clear()
+            return render(request, 'order/created.html',
+                          {'order': order})
+    else:
+        form = OrderCreateForm
+    return render(request, 'order/create.html',
+                  {'cart': cart, 'form': form})

@@ -1,7 +1,7 @@
 from django import forms
 from django.core.validators import MinValueValidator
 
-from .models import Comment
+from .models import Comment, CartOrder
 
 class CommentForm(forms.ModelForm):
     body = forms.CharField(widget=forms.Textarea(attrs={'placeholder': 'Не забудьте написать комментарий!'}))
@@ -33,3 +33,8 @@ class CartSubtractProductForm(forms.Form):
         widget=forms.HiddenInput
     )
 
+
+class OrderCreateForm(forms.ModelForm):
+    class Meta:
+        model = CartOrder
+        fields = ['first_name', 'last_name', 'email', 'address', 'postal_code', 'city']
