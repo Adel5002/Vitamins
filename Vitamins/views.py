@@ -1,15 +1,22 @@
+import json
+
 from django.views.generic import DetailView, ListView, CreateView, TemplateView
 from django.urls import reverse
 from django.views.decorators.http import require_POST
 from django.db.models import Avg
-from django.shortcuts import get_object_or_404, redirect, render
+from django.shortcuts import get_object_or_404, redirect, render, HttpResponseRedirect, HttpResponse
 from django.core.paginator import Paginator
 from django.http import QueryDict
 
+from yookassa import Configuration, Payment, Settings
+import uuid
+from decimal import Decimal
+
+from .payment_acceptance import payment_acceptance
 
 from .cart import Cart
 from .models import Product, Comment, Category, CartOrderItem
-from .forms import CommentForm, CartAddProductForm, CartSubtractProductForm, OrderCreateForm
+from .forms import CommentForm, CartAddProductForm, CartSubtractProductForm, OrderCreateForm, CartOrder
 
 
 
@@ -157,12 +164,18 @@ def cart_detail(request):
     cart = Cart(request)
     return render(request, 'cart/detail.html', {'cart': cart})
 
+Configuration.configure_auth_token('AAEACHrxANezOQAAAYnVuWmVJwaweE8g0hZc89XCLpW4oYewND8biU8Ln8hQn5tFZep5wuqxDSHUSCjKWYciGo8W')
+
+settings = Settings.get_account_settings()
 
 def order_create(request):
     cart = Cart(request)
+
     if request.method == 'POST':
         form = OrderCreateForm(request.POST)
         if form.is_valid():
+            orders = form.save(commit=False)
+            orders.user = request.user
             order = form.save()
             for item in cart:
                 CartOrderItem.objects.create(order=order,
@@ -172,9 +185,38 @@ def order_create(request):
 
             # очистка корзины
             cart.clear()
-            return render(request, 'order/created.html',
-                          {'order': order})
+            total = sum(Decimal(item['price']) * item['quantity'] for item in cart)
+            payment = Payment.create({
+                "amount": {
+                    "value": total,
+                    "currency": "RUB"
+                },
+                "confirmation": {
+                    "type": "redirect",
+                    "return_url": "https://kitten-classic-abnormally.ngrok-free.app/"
+                },
+                "capture": True,
+                "description": "Заказ №1"
+                }, uuid.uuid4())
+
+            return HttpResponseRedirect(payment.confirmation.confirmation_url)
+
     else:
         form = OrderCreateForm
+
     return render(request, 'order/create.html',
                   {'cart': cart, 'form': form})
+
+
+class Webhooks(ListView):
+    template_name = 'webhooks.html'
+    model = CartOrder
+
+
+    def post(self, request, *args, **kwargs):
+        response = json.loads(request.body)
+        cartorder_id = CartOrder.objects.last().id
+        print(cartorder_id)
+        if payment_acceptance(response, cartorder_id=cartorder_id):
+            return HttpResponse(200)
+        return HttpResponse(404)

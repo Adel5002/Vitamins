@@ -147,12 +147,12 @@ class CartOrder(models.Model):
         return f'{self.first_name}-{self.last_name}'
 
     def get_total_cost(self):
-        orderitems = self.cardorderitem_set.all()
-        total = sum([item.get_total for item in orderitems])
+        orderitems = self.cartorderitem_set.all()
+        total = sum([item.get_cost for item in orderitems])
         return total
 
     def get_cart_item(self):
-        orderitems = self.cardorderitem_set.all()
+        orderitems = self.cartorderitem_set.all()
         total = sum([item.qty for item in orderitems])
         return total
 

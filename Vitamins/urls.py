@@ -1,7 +1,9 @@
 from django.urls import path
 
+from django.views.decorators.csrf import csrf_exempt
+
 from .views import ProdictList, ProductDetails, AddComment, cart_detail, cart_add, cart_remove, CategoryListView, \
-    cart_subtract, SearchProducts, AboutUs, order_create
+    cart_subtract, SearchProducts, AboutUs, order_create, Webhooks
 
 # app_name = 'Vitamins'
 
@@ -21,4 +23,5 @@ urlpatterns = [
     path('cart_detail/remove/<slug:product_slug>/', cart_remove, name='cart_remove'),
 
     path('create', order_create, name='order_create'),
+    path('webhooks', csrf_exempt(Webhooks.as_view()))
 ]

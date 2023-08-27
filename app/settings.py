@@ -11,6 +11,9 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 import os
 from pathlib import Path
+from dotenv import load_dotenv
+
+load_dotenv()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -20,12 +23,13 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-$n@9(x1%bj$p0(n@p_c=6q^663!2*wm9_b08f#2%4m&bzds&ru'
+SECRET_KEY = os.getenv('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
+CSRF_TRUSTED_ORIGINS = [os.getenv('CSRF_TRUSTED_ORIGINS')]
 
 
 # Application definition
@@ -57,6 +61,8 @@ INSTALLED_APPS = [
     # django-filters
     'django_filters',
 ]
+
+DEFAULT_FROM_EMAIL = os.getenv('EMAIL_HOST_USER') + '@yandex.ru'
 
 SITE_ID = 1
 
@@ -96,16 +102,23 @@ TEMPLATES = [
 ]
 
 AUTHENTICATION_BACKENDS = [
-
     'django.contrib.auth.backends.ModelBackend',
-
     'allauth.account.auth_backends.AuthenticationBackend',
-
 ]
+
+EMAIL_HOST = 'smtp.yandex.ru'
+EMAIL_PORT = 465
+EMAIL_HOST_USER = os.getenv('EMAIL_HOST_USER')
+EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD')
+EMAIL_USE_SSL = True
 
 WSGI_APPLICATION = 'app.wsgi.application'
 
+ADMIN = 'aromat29.11@gmail.com'
+
 LOGIN_REDIRECT_URL = "/"
+
+SITE_URL = os.getenv('CSRF_TRUSTED_ORIGINS')
 
 CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"
 CRISPY_TEMPLATE_PACK = "bootstrap5"
