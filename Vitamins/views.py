@@ -21,11 +21,13 @@ from .forms import CommentForm, CartAddProductForm, CartSubtractProductForm, Ord
 
 
 
+
 class ProdictList(ListView):
     model = Product
     template_name = 'index.html'
     context_object_name = 'products'
     paginate_by = 8
+
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -198,7 +200,6 @@ def order_create(request):
                 "capture": True,
                 "description": "Заказ №1"
                 }, uuid.uuid4())
-
             return HttpResponseRedirect(payment.confirmation.confirmation_url)
 
     else:

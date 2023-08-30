@@ -184,3 +184,9 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_URL = '/media/'
 
 CART_SESSION_ID = 'cart'
+
+CELERY_BROKER_URL = 'redis://demo_app_redis:6379/0'
+CELERY_RESULT_BACKEND = 'redis://demo_app_redis:6379/0'
+CELERY_ACCEPT_CONTENT = ['application/json']
+CELERY_TASK_SERIALIZER = 'json'
+CELERY_RESULT_SERIALIZER = 'json'
