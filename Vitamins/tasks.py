@@ -17,9 +17,11 @@ def send_notify(instance_id):
             last_name = instance.last_name
             user_email = instance.email
             address = instance.address
+            city = instance.city
             postal_code = instance.postal_code
             products = [f'{product.qty}x {product.product.title}' for product in instance.cartorderitem_set.all()]
             total_price = [int(product.get_cost()) for product in instance.cartorderitem_set.all()]
+            phone_number = instance.phone_number
             subject = 'Новый оплаченный заказ!'
 
             email = settings.ADMIN
@@ -36,9 +38,11 @@ def send_notify(instance_id):
                 'last_name': last_name,
                 'user_email': user_email,
                 'address': address,
+                'city': city,
                 'postal_code': postal_code,
                 'products': ', '.join(products),
-                'total_price': sum(total_price)
+                'total_price': sum(total_price),
+                'phone_number': phone_number
             }
         )
 

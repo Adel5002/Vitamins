@@ -3,7 +3,7 @@ from django.urls import path
 from django.views.decorators.csrf import csrf_exempt
 
 from .views import ProdictList, ProductDetails, AddComment, cart_detail, cart_add, cart_remove, CategoryListView, \
-    cart_subtract, SearchProducts, AboutUs, order_create, Webhooks
+    cart_subtract, SearchProducts, AboutUs, order_create, Webhooks, OrderAcceptance, UserOrders
 
 # app_name = 'Vitamins'
 
@@ -23,5 +23,7 @@ urlpatterns = [
     path('cart_detail/remove/<slug:product_slug>/', cart_remove, name='cart_remove'),
 
     path('create', order_create, name='order_create'),
-    path('webhooks', csrf_exempt(Webhooks.as_view()))
+    path('webhooks', csrf_exempt(Webhooks.as_view())),
+    path('order_succeeded', OrderAcceptance.as_view()),
+    path('user_orders', UserOrders.as_view(), name='user_orders'),
 ]

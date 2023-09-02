@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+
+
+{% block content %}
+<div class="container">
+    <div class="row mt-5">
+        <div class="col-5"></div>
+        <div class="col">
+            <div class="mt-5">
+                <h1 class="text-success mb-3" style="font-weight: 700;">Спасибо! <i class="fa-solid fa-circle-check fa-xl" style="color: #4fac11;"></i></h1>
+                <p style="font-size: 22px;">Ваш заказ был одобрен!</p>
+                <p style="font-size: 22px;">Номер заказа: {{ order.id }}</p>
+                {% for products in order.cartorderitem_set.all %}
+                <p style="font-size: 22px;">Позиция: {{ products.product.title }} х{{ products.qty }}</p>
+                {% endfor %}
+                <p>Трек номер можно посмтореть здесь <a href="{% url 'user_orders' %}">{{ user.username }}</a></p>
+                <a class="btn btn-outline-success"  href="{% url 'main' %}">Продолжить шоппинг</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

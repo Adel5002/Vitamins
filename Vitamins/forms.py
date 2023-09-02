@@ -37,4 +37,4 @@ class CartSubtractProductForm(forms.Form):
 class OrderCreateForm(forms.ModelForm):
     class Meta:
         model = CartOrder
-        fields = ['first_name', 'last_name', 'email', 'address', 'postal_code', 'city']
+        fields = ['first_name', 'last_name', 'email', 'address', 'postal_code', 'city', 'phone_number']

@@ -195,7 +195,7 @@ def order_create(request):
                 },
                 "confirmation": {
                     "type": "redirect",
-                    "return_url": "https://kitten-classic-abnormally.ngrok-free.app/"
+                    "return_url": "https://kitten-classic-abnormally.ngrok-free.app/order_succeeded"
                 },
                 "capture": True,
                 "description": "Заказ №1"
@@ -221,3 +221,22 @@ class Webhooks(ListView):
         if payment_acceptance(response, cartorder_id=cartorder_id):
             return HttpResponse(200)
         return HttpResponse(404)
+
+
+class OrderAcceptance(ListView):
+    template_name = 'order/order_acceptance.html'
+    context_object_name = 'order'
+
+    def get_queryset(self):
+        queryset = CartOrder.objects.filter(user=self.request.user).last()
+        return queryset
+
+
+class UserOrders(ListView):
+    template_name = 'user_orders.html'
+    context_object_name = 'orders'
+
+    def get_queryset(self):
+        queryset = CartOrder.objects.filter(user=self.request.user).order_by('-id')[:3]
+        return queryset
+

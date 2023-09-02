@@ -67,7 +67,7 @@
                           <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}"/>
                           {% endif %}
 
-                          {{ user.username }} | <button class="nav-item sign-out" type="submit">Выход</button>
+                            <a href="{% url 'user_orders' %}">{{ user.username }}</a> | <button class="nav-item sign-out" type="submit">Выход</button>
                         </form>
                     {% else %}
                       <li class="nav-but">

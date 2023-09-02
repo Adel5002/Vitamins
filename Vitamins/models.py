@@ -138,6 +138,8 @@ class CartOrder(models.Model):
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
     paid = models.BooleanField(default=False)
+    phone_number = models.IntegerField(null=True)
+    track_number = models.CharField(max_length=120, null=True, blank=True)
 
     class Meta:
         verbose_name = 'Заказ'
@@ -148,12 +150,12 @@ class CartOrder(models.Model):
 
     def get_total_cost(self):
         orderitems = self.cartorderitem_set.all()
-        total = sum([item.get_cost for item in orderitems])
+        total = sum([item.get_cost() for item in orderitems])
         return total
 
     def get_cart_item(self):
         orderitems = self.cartorderitem_set.all()
-        total = sum([item.qty for item in orderitems])
+        total = sum([item.qty() for item in orderitems])
         return total
 
 
