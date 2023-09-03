@@ -5,52 +5,54 @@
 {% block content %}
 <div class="container">
     <div class="row mt-5">
-        <h1 class="text-center mb-5">Последние 3 платежа</h1>
-        <table class="table">
-            <thead>
-                <tr>
-                    <th>id</th>
-                    <th>Имя</th>
-                    <th>Сумма</th>
-                    <th>Статус платежа</th>
-                    <th>Трек номер</th>
-                </tr>
-            </thead>
-            <tbody>
-            {% for order in orders %}
-                <tr>
-                    <td>{{ order.id }}</td>
-                    <td>
-                        {% for item in order.cartorderitem_set.all %}
-                        <p>{{ item.product.title }} = х{{ item.qty }}</p>
-                        {% endfor %}
-                    </td>
-                    <td>
-                        {% for item in order.cartorderitem_set.all %}
-                            <p>{{ item.get_cost }}</p>
-                        {% endfor %}
-                    </td>
-                    <td>
-                        {% if order.paid %}
-                        <i class="ms-5 fa-solid fa-circle-check fa-lg" style="color: #48b71f;"></i>
-                        {% else %}
-                        <i class="ms-5 fa-solid fa-circle-xmark fa-lg" style="color: #cd2a18;"></i>
-                        {% endif %}
-                    </td>
-                    <td>
-                        {% if order.track_number %}
-                        <p>{{ order.track_number }}</p>
-                        {% elif order.paid == False %}
-                        <p>Вы не заплатили за заказ</p>
-                        {% else %}
-                        <p>Скоро здесь появится <br>
-                            трек номер</p>
-                        {% endif %}
-                    </td>
-                </tr>
-            {% endfor %}
-            </tbody>
-        </table>
+        <div class="table-responsive">
+            <h1 class="text-center mb-5">Последние 3 платежа</h1>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>id</th>
+                        <th>Имя</th>
+                        <th>Сумма</th>
+                        <th>Статус платежа</th>
+                        <th>Трек номер</th>
+                    </tr>
+                </thead>
+                <tbody>
+                {% for order in orders %}
+                    <tr>
+                        <td>{{ order.id }}</td>
+                        <td>
+                            {% for item in order.cartorderitem_set.all %}
+                            <p>{{ item.product.title }} х{{ item.qty }}</p>
+                            {% endfor %}
+                        </td>
+                        <td>
+                            {% for item in order.cartorderitem_set.all %}
+                                <p>{{ item.get_cost }}</p>
+                            {% endfor %}
+                        </td>
+                        <td>
+                            {% if order.paid %}
+                            <i class=" fa-solid fa-circle-check fa-lg" style="color: #48b71f;"></i>
+                            {% else %}
+                            <i class=" fa-solid fa-circle-xmark fa-lg" style="color: #cd2a18;"></i>
+                            {% endif %}
+                        </td>
+                        <td>
+                            {% if order.track_number %}
+                            <p>{{ order.track_number }}</p>
+                            {% elif order.paid == False %}
+                            <p>Вы не заплатили за заказ</p>
+                            {% else %}
+                            <p>Скоро здесь появится <br>
+                                трек номер</p>
+                            {% endif %}
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
     </div>
 </div>
 {% endblock %}
