@@ -4,6 +4,7 @@
 {% block content %}
 <div class="container">
     <div class="row mt-5">
+        {% if order.paid == True %}
         <div class="col-sm-5"></div>
         <div class="col-sm">
             <div class="success-info mt-5">
@@ -16,7 +17,11 @@
                 <p>Трек номер можно посмтореть здесь <a href="{% url 'user_orders' %}">{{ user.username }}</a></p>
                 <a class="btn btn-outline-success"  href="{% url 'main' %}">Продолжить шоппинг</a>
             </div>
+            {% else %}
+            <h1 class="text-center mb-5 mt-5" style="font-weight: 700;">Вы не оплатили заказ =( <i class="fa-solid fa-circle-xmark fa-xl" style="color: #cd2a18; vertical-align: middle;"></i></h1>
+            <a style="margin: 0 auto; max-width: 250px;" class="btn btn-outline-success"  href="{% url 'main' %}">Вернуться на главную</a>
         </div>
     </div>
+    {% endif %}
 </div>
 {% endblock %}
