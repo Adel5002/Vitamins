@@ -56,8 +56,8 @@ class Product(models.Model):
     seller = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True, help_text='Указывать не обяз \
                                                                                  ательно, это просто задел на будущее!')
 
-    price = models.DecimalField(max_digits=99999999999, decimal_places=2)
-    old_price = models.DecimalField(max_digits=99999999999, decimal_places=2, null=True, blank=True, help_text='Указ\
+    price = models.DecimalField(max_digits=10, decimal_places=2)
+    old_price = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True, help_text='Указ\
                                             ывать в том случае если хотите сделать скидку')
 
     image = models.ImageField(upload_to='vitamins/')
@@ -138,7 +138,7 @@ class CartOrder(models.Model):
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
     paid = models.BooleanField(default=False)
-    phone_number = models.IntegerField(null=True)
+    phone_number = models.BigIntegerField(null=True)
     track_number = models.CharField(max_length=120, null=True, blank=True)
 
     class Meta:

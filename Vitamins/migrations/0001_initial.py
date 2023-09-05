@@ -49,8 +49,8 @@ class Migration(migrations.Migration):
             name='Product',
             fields=[
                 ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('price', models.DecimalField(decimal_places=2, max_digits=99999999999)),
-                ('old_price', models.DecimalField(blank=True, decimal_places=2, help_text='Указ                                            ывать в том случае если хотите сделать скидку', max_digits=99999999999, null=True)),
+                ('price', models.DecimalField(decimal_places=2, max_digits=10)),
+                ('old_price', models.DecimalField(blank=True, decimal_places=2, help_text='Указ                                            ывать в том случае если хотите сделать скидку', max_digits=10, null=True)),
                 ('image', models.ImageField(upload_to='vitamins/')),
                 ('title', models.CharField(max_length=120)),
                 ('description', models.TextField(blank=True, null=True)),

@@ -14,9 +14,14 @@
                 <input class="form-control mb-3" placeholder="{{ form.postal_code.label }}" type="text" name="{{ form.postal_code.name }}">
                 <input class="form-control mb-3" placeholder="{{ form.city.label }}" type="text" name="{{ form.city.name }}">
                 <input class="form-control mb-3" placeholder="{{ form.phone_number.label }}" type="number" name="{{ form.phone_number.name }}">
+                <p>{{form.errors}}</p>
                 <div class="d-grid gap-2">
-                  <button class="btn btn-primary" type="submit">Продолжить</button>
+                  {% if user.is_authenticated %}
+                    <button class="btn btn-primary" type="submit">Продолжить</button>
+                  {% else %}
+                    <a class="btn btn-primary" href="{% url 'account_login' %}">Пожалуйста войдите в учетную запись</a>
                 </div>
+                  {% endif %}
                 {% csrf_token %}
             </form>
             <div class="order-info">

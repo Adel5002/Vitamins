@@ -8,6 +8,16 @@ services:
     command: redis-server
     ports:
       - '6379:6379'
+  db:
+    image: postgres
+    container_name: 'demo_app_postgres'
+    restart: always
+    environment:
+      POSTGRES_USER: adel
+      POSTGRES_PASSWORD: DexJr57Xr83djNgsqlSMhTtr
+      POSTGRES_DB: vitaminbd
+    ports:
+      - '54321:5432'
   web:
     build: .
     restart: always
