@@ -1,10 +1,10 @@
 from django.conf import settings
 from django.core.mail import EmailMultiAlternatives
-from django.db.models.signals import post_save
-from django.dispatch import receiver
 from django.template.loader import render_to_string
 from celery import shared_task
-
+import os
+import glob
+from app.settings import BASE_DIR
 
 @shared_task(rate_limit='10/m')
 def send_notify(instance_id):
@@ -56,4 +56,19 @@ def send_notify(instance_id):
         message.send()
     except Exception:
         pass
+
+
+@shared_task
+def delete_not_actual_caches():
+    cache_folder = os.path.join(BASE_DIR, "site_cache")
+    caches = glob.glob(os.path.join(cache_folder, "*.djcache"))
+
+    for cache_file in caches:
+        try:
+            os.unlink(cache_file)
+        except OSError as e:
+            print("Error: %s: %s" % (cache_file, e.strerror))
+
+
+
 

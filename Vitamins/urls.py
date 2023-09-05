@@ -1,20 +1,21 @@
 from django.urls import path
 
 from django.views.decorators.csrf import csrf_exempt
+from django.views.decorators.cache import cache_page
 
 from .views import ProdictList, ProductDetails, AddComment, cart_detail, cart_add, cart_remove, CategoryListView, \
     cart_subtract, SearchProducts, AboutUs, order_create, Webhooks, OrderAcceptance, UserOrders
 
+
 # app_name = 'Vitamins'
 
 urlpatterns = [
-    path('', ProdictList.as_view(), name='main'),
+    path('', cache_page(60)(ProdictList.as_view()), name='main'),
     path('search/', SearchProducts.as_view(), name='search_results'),
     path('about_us/', AboutUs.as_view(), name='about_us'),
-    path('<slug:slug>/', ProductDetails.as_view(), name='product_details'),
+    path('<slug:slug>/', cache_page(60)(ProductDetails.as_view()), name='product_details'),
     path('comments/<slug:slug>/', AddComment.as_view(), name='add_comment'),
     path('category/<slug:slug>/', CategoryListView.as_view(), name='category_products'),
-
 
     path('cart_detail', cart_detail, name='cart_detail'),
     path('cart_detail/add/<slug:product_slug>/', cart_add, name='cart_add'),

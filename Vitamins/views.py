@@ -40,13 +40,13 @@ class ProductDetails(DetailView):
     model = Product
     template_name = 'product_details.html'
     context_object_name = 'product'
-    comments_paginate_by = 1
+    comments_paginate_by = 10
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         avg_rating = Comment.objects.filter(product=self.object).aggregate(rating=Avg('rating'))
         cart_product_form = CartAddProductForm()
-        comments = Comment.objects.filter(product=self.object)
+        comments = Comment.objects.filter(product=self.object).order_by('id')
         paginator = Paginator(comments, self.comments_paginate_by)
         page_number = self.request.GET.get('page')
 

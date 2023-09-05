@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'django.contrib.sites',
     'django.contrib.staticfiles',
 
+
     #my applications
     'Vitamins',
 
@@ -60,7 +61,11 @@ INSTALLED_APPS = [
 
     # django-filters
     'django_filters',
+
+    'django_celery_beat',
+
 ]
+
 
 DEFAULT_FROM_EMAIL = os.getenv('EMAIL_HOST_USER') + '@yandex.ru'
 
@@ -194,3 +199,13 @@ CELERY_RESULT_BACKEND = 'redis://demo_app_redis:6379/0'
 CELERY_ACCEPT_CONTENT = ['application/json']
 CELERY_TASK_SERIALIZER = 'json'
 CELERY_RESULT_SERIALIZER = 'json'
+
+
+CACHES = {
+    "default": {
+        "BACKEND": "django.core.cache.backends.filebased.FileBasedCache",
+        "LOCATION": os.path.join(BASE_DIR, 'site_cache'),
+    }
+}
+
+CELERY_BEAT_SCHEDULER = 'django_celery_beat.schedulers:DatabaseScheduler'

@@ -38,3 +38,14 @@ services:
     depends_on:
       - web
       - redis
+  celery-beat:
+    build: .
+    container_name: 'demo_app_celery_beat'
+    command: celery -A app worker -l info -B
+    volumes:
+      - .:/app
+    links:
+      - redis
+    depends_on:
+      - web
+      - redis
