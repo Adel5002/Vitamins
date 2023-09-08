@@ -119,7 +119,7 @@ EMAIL_USE_SSL = True
 
 WSGI_APPLICATION = 'app.wsgi.application'
 
-ADMIN = 'aromat29.11@gmail.com'
+ADMIN = os.getenv('ADMIN')
 
 LOGIN_REDIRECT_URL = "/"
 
@@ -209,3 +209,48 @@ CACHES = {
 }
 
 CELERY_BEAT_SCHEDULER = 'django_celery_beat.schedulers:DatabaseScheduler'
+
+
+LOG_DIR = os.path.join(BASE_DIR, 'logs')
+LOG_FILE = '/service.log'
+LOG_PATH = LOG_DIR + LOG_FILE
+
+
+INTERNAL_IPS = [
+    "127.0.0.1",
+]
+
+
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': True,
+    'formatters': {
+        'verbose': {
+            'format': '{levelname} {asctime} {module} {message}',
+            'style': '{',
+        },
+    },
+    'handlers': {
+        'mail_admins': {
+            'level': 'ERROR',  # Уровень логирования для ошибок
+            'class': 'app.custom_handlers.MyCustomAdminEmailHandler',
+            'include_html': True,
+            'formatter': 'verbose',  # Формат сообщения
+
+        },
+        'file': {
+            'level': 'ERROR',
+            'class': 'logging.FileHandler',
+            'filename': LOG_PATH,
+            'formatter': 'verbose',
+        },
+    },
+    'loggers': {
+        'django.request': {
+            'handlers': ['file', 'mail_admins'],
+            'level': 'ERROR',  # Уровень логирования для ошибок Django
+            'propagate': False,
+        },
+    },
+}

@@ -13,12 +13,9 @@ import uuid
 from decimal import Decimal
 
 from .payment_acceptance import payment_acceptance
-
 from .cart import Cart
 from .models import Product, Comment, Category, CartOrderItem
 from .forms import CommentForm, CartAddProductForm, CartSubtractProductForm, OrderCreateForm, CartOrder
-
-
 
 
 
