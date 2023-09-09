@@ -2,7 +2,7 @@
 
 {% block content %}
 <div class="container">
-
+    {% if products %}
     <div class="row mt-5 infinite-container">
         {% for product in products %}
         <div class="col-sm-2 mb-3 infinite-item">
@@ -45,10 +45,13 @@
         <div class="row">
         <div class="col-12">
             {% if page_obj.has_next %}
-            <a class="infinite-more-link" href="?{{ search_params }}&page={{ page_obj.next_page_number }}">next</a>
+            <a class="infinite-more-link" href="?{{ search_params }}&page={{ page_obj.next_page_number }}"></a>
             {% endif %}
         </div>
     </div>
+    {% else %}
+    <h1 class="text-center mt-5">Витаминов по вашему запросу не найдено...</h1>
+    {% endif %}
 </div>
 
 {% endblock %}

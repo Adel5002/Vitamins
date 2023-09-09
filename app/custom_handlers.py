@@ -1,11 +1,12 @@
 import os
+import logging
 
 from django.utils.log import AdminEmailHandler
-import logging
 from django.core.mail import EmailMultiAlternatives
 from django.template.loader import render_to_string
 
 from . import settings
+
 
 class MyCustomAdminEmailHandler(AdminEmailHandler):
 
@@ -31,3 +32,4 @@ class MyCustomAdminEmailHandler(AdminEmailHandler):
             print(email)
             message.attach_alternative(html_content, 'text/html')
             message.send()
+

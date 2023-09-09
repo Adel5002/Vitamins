@@ -6,6 +6,7 @@ import os
 import glob
 from app.settings import BASE_DIR
 
+
 @shared_task(rate_limit='10/m')
 def send_notify(instance_id):
     from .models import CartOrder

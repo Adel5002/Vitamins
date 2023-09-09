@@ -3,18 +3,18 @@ from django.contrib import admin
 from .models import *
 
 
-
 class ProductAdmin(admin.ModelAdmin):
     prepopulated_fields = {'slug': ('title',)}
 
 
-class CategorytAdmin(admin.ModelAdmin):
+class CategoryAdmin(admin.ModelAdmin):
     prepopulated_fields = {'slug': ('name',)}
 
 
 class OrderItemInline(admin.TabularInline):
     model = CartOrderItem
     raw_id_fields = ['product']
+
 
 class OrderAdmin(admin.ModelAdmin):
     list_display = ['id', 'first_name', 'last_name', 'email',
@@ -24,7 +24,7 @@ class OrderAdmin(admin.ModelAdmin):
     inlines = [OrderItemInline]
 
 
-admin.site.register(Category, CategorytAdmin)
+admin.site.register(Category, CategoryAdmin)
 admin.site.register(Vendor)
 admin.site.register(Product, ProductAdmin)
 admin.site.register(ProductImage)

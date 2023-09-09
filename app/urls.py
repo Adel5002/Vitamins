@@ -19,11 +19,15 @@ from django.urls import path, include
 
 from django.conf import settings
 from django.conf.urls.static import static
+from Vitamins.views import PageNotFoundErrorView, ServerErrorView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('accounts/', include('allauth.urls')),
     path('', include('Vitamins.urls')),
 ]
+
+handler404 = PageNotFoundErrorView.as_view()
+handler500 = ServerErrorView.as_view()
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

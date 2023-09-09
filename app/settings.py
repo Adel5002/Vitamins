@@ -10,6 +10,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 import os
+
 from pathlib import Path
 from dotenv import load_dotenv
 
@@ -44,7 +45,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
 
-    #my applications
+    #my-applications
     'Vitamins',
 
     #registration
@@ -62,6 +63,7 @@ INSTALLED_APPS = [
     # django-filters
     'django_filters',
 
+    # django-celery-beat
     'django_celery_beat',
 
 ]
@@ -199,6 +201,7 @@ CELERY_RESULT_BACKEND = 'redis://demo_app_redis:6379/0'
 CELERY_ACCEPT_CONTENT = ['application/json']
 CELERY_TASK_SERIALIZER = 'json'
 CELERY_RESULT_SERIALIZER = 'json'
+CELERY_BEAT_SCHEDULER = 'django_celery_beat.schedulers:DatabaseScheduler'
 
 
 CACHES = {
@@ -207,8 +210,6 @@ CACHES = {
         "LOCATION": os.path.join(BASE_DIR, 'site_cache'),
     }
 }
-
-CELERY_BEAT_SCHEDULER = 'django_celery_beat.schedulers:DatabaseScheduler'
 
 
 LOG_DIR = os.path.join(BASE_DIR, 'logs')
@@ -219,7 +220,6 @@ LOG_PATH = LOG_DIR + LOG_FILE
 INTERNAL_IPS = [
     "127.0.0.1",
 ]
-
 
 
 LOGGING = {
@@ -233,10 +233,10 @@ LOGGING = {
     },
     'handlers': {
         'mail_admins': {
-            'level': 'ERROR',  # Уровень логирования для ошибок
+            'level': 'ERROR',
             'class': 'app.custom_handlers.MyCustomAdminEmailHandler',
             'include_html': True,
-            'formatter': 'verbose',  # Формат сообщения
+            'formatter': 'verbose',
 
         },
         'file': {
@@ -249,7 +249,7 @@ LOGGING = {
     'loggers': {
         'django.request': {
             'handlers': ['file', 'mail_admins'],
-            'level': 'ERROR',  # Уровень логирования для ошибок Django
+            'level': 'ERROR',
             'propagate': False,
         },
     },

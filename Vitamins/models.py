@@ -122,11 +122,6 @@ class Comment(models.Model):
         return self.rating
 
 
-
-
-
-
-
 class CartOrder(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
     first_name = models.CharField('Имя', max_length=50)
@@ -157,7 +152,6 @@ class CartOrder(models.Model):
         orderitems = self.cartorderitem_set.all()
         total = sum([item.qty() for item in orderitems])
         return total
-
 
 
 class CartOrderItem(models.Model):

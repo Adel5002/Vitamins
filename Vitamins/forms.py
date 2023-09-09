@@ -3,15 +3,13 @@ from django.core.validators import MinValueValidator
 
 from .models import Comment, CartOrder
 
+
 class CommentForm(forms.ModelForm):
     body = forms.CharField(widget=forms.Textarea(attrs={'placeholder': 'Не забудьте написать комментарий!'}))
 
     class Meta:
         model = Comment
         fields = ['body', 'rating']
-
-
-
 
 
 PRODUCT_QUANTITY_CHOICES = [(i, str(i)) for i in range(1, 21)]

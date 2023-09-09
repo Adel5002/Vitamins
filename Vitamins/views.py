@@ -1,4 +1,6 @@
 import json
+import uuid
+import os
 
 from django.views.generic import DetailView, ListView, CreateView, TemplateView
 from django.urls import reverse
@@ -9,7 +11,6 @@ from django.core.paginator import Paginator
 from django.http import QueryDict
 
 from yookassa import Configuration, Payment, Settings
-import uuid
 from decimal import Decimal
 
 from .payment_acceptance import payment_acceptance
@@ -24,7 +25,6 @@ class ProdictList(ListView):
     template_name = 'index.html'
     context_object_name = 'products'
     paginate_by = 8
-
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -76,7 +76,8 @@ class SearchProducts(ListView):
     model = Product
     template_name = 'search_product.html'
     context_object_name = 'products'
-    paginate_by = 2
+    paginate_by = 3
+
     def get_queryset(self):
         queryset = super().get_queryset()
         query = self.request.GET.get('title')
@@ -105,7 +106,6 @@ class AddComment(CreateView):
     form_class = CommentForm
     template_name = 'add_comment.html'
 
-
     def form_valid(self, form):
         form.instance.product = Product.objects.get(slug=self.kwargs['slug'])
         form.instance.commentator = self.request.user
@@ -113,7 +113,6 @@ class AddComment(CreateView):
 
     def get_success_url(self):
         return reverse('product_details', kwargs={'slug': self.object.product.slug})
-
 
 
 @require_POST
@@ -163,9 +162,11 @@ def cart_detail(request):
     cart = Cart(request)
     return render(request, 'cart/detail.html', {'cart': cart})
 
-Configuration.configure_auth_token('AAEACHrxANezOQAAAYnVuWmVJwaweE8g0hZc89XCLpW4oYewND8biU8Ln8hQn5tFZep5wuqxDSHUSCjKWYciGo8W')
+
+Configuration.configure_auth_token(os.getenv('AUTH_TOKEN'))
 
 settings = Settings.get_account_settings()
+
 
 def order_create(request):
     cart = Cart(request)
@@ -195,7 +196,7 @@ def order_create(request):
                     "return_url": "https://kitten-classic-abnormally.ngrok-free.app/order_succeeded"
                 },
                 "capture": True,
-                "description": "Заказ №1"
+                "description": f'Ваш номер заказа {CartOrder.objects.filter(user=request.user).last().id}'
                 }, uuid.uuid4())
             return HttpResponseRedirect(payment.confirmation.confirmation_url)
 
@@ -210,9 +211,9 @@ class Webhooks(ListView):
     template_name = 'webhooks.html'
     model = CartOrder
 
-
     def post(self, request, *args, **kwargs):
         response = json.loads(request.body)
+        print(response)
         cartorder_id = CartOrder.objects.last().id
         print(cartorder_id)
         if payment_acceptance(response, cartorder_id=cartorder_id):
@@ -236,4 +237,18 @@ class UserOrders(ListView):
     def get_queryset(self):
         queryset = CartOrder.objects.filter(user=self.request.user).order_by('-id')[:3]
         return queryset
+
+
+class PageNotFoundErrorView(TemplateView):
+    template_name = 'exceptions/404.html'
+
+    def get(self, request, *args, **kwargs):
+        return render(request, self.template_name, status=404)
+
+
+class ServerErrorView(TemplateView):
+    template_name = 'exceptions/500.html'
+
+    def get(self, request, *args, **kwargs):
+        return render(request, self.template_name, status=500)
 
