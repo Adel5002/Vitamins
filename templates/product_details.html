@@ -11,8 +11,9 @@
             <h1 class="searched-title">{{ product.title }}</h1>
 
             <div class="main-information mt-5">
+                <p>Осталось:&nbsp;<strong>{{ product.quantity }} шт.</strong></p>
                 <p>Производитель:&nbsp;<strong> {{ product.vendor }}</strong></p>
-                <p>Форма выпуска::&nbsp;<strong> {{ product.release_form }}</strong></p>
+                <p>Форма выпуска:&nbsp;<strong> {{ product.release_form }}</strong></p>
                 <p>Возраст от:&nbsp;<strong> {{ product.age }}+</strong></p>
                 <p>Страна выпуска:&nbsp;<strong> {{ product.country }}</strong></p>
             </div>

@@ -1,7 +1,10 @@
 from django import forms
 from django.core.validators import MinValueValidator
+from django.shortcuts import get_object_or_404
 
-from .models import Comment, CartOrder
+from .models import Comment, CartOrder, Product
+from .cart import Cart
+
 
 
 class CommentForm(forms.ModelForm):
@@ -12,7 +15,8 @@ class CommentForm(forms.ModelForm):
         fields = ['body', 'rating']
 
 
-PRODUCT_QUANTITY_CHOICES = [(i, str(i)) for i in range(1, 21)]
+
+PRODUCT_QUANTITY_CHOICES = [(i, str(i)) for i in range(1, 10)]
 
 
 class CartAddProductForm(forms.Form):
@@ -33,6 +37,11 @@ class CartSubtractProductForm(forms.Form):
 
 
 class OrderCreateForm(forms.ModelForm):
+
+    user_agreement = forms.BooleanField(required=True)
     class Meta:
         model = CartOrder
-        fields = ['first_name', 'last_name', 'email', 'address', 'postal_code', 'city', 'phone_number']
+        fields = [
+            'first_name', 'last_name', 'email', 'address', 'postal_code', 'city', 'phone_number', 'user_agreement'
+        ]
+

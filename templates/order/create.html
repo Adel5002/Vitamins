@@ -14,6 +14,7 @@
                 <input class="form-control mb-3" placeholder="{{ form.postal_code.label }}" type="text" name="{{ form.postal_code.name }}">
                 <input class="form-control mb-3" placeholder="{{ form.city.label }}" type="text" name="{{ form.city.name }}">
                 <input class="form-control mb-3" placeholder="{{ form.phone_number.label }}" type="number" name="{{ form.phone_number.name }}">
+                <input class="me-2 form-check-input" type="checkbox" name="{{ form.user_agreement.name }}">Принять политику <a href="#">конфиденциальности</a>
                 <p>{{form.errors}}</p>
                 <div class="d-grid gap-2">
                   {% if user.is_authenticated %}

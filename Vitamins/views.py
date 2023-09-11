@@ -5,7 +5,7 @@ import os
 from django.views.generic import DetailView, ListView, CreateView, TemplateView
 from django.urls import reverse
 from django.views.decorators.http import require_POST
-from django.db.models import Avg
+from django.db.models import Avg, F, Sum
 from django.shortcuts import get_object_or_404, redirect, render, HttpResponseRedirect, HttpResponse
 from django.core.paginator import Paginator
 from django.http import QueryDict
@@ -31,6 +31,10 @@ class ProdictList(ListView):
         cart_product_form = CartAddProductForm()
         context['cart_product_form'] = cart_product_form
         return context
+
+    def get_queryset(self):
+        queryset = Product.objects.filter(is_available=True)
+        return queryset
 
 
 class ProductDetails(DetailView):
@@ -62,7 +66,7 @@ class CategoryListView(ListView):
     def get_queryset(self):
         slug = self.kwargs['slug']
         category = get_object_or_404(Category, slug=slug)
-        return Product.objects.filter(categories=category)
+        return Product.objects.filter(categories=category, is_available=True)
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -82,7 +86,7 @@ class SearchProducts(ListView):
         queryset = super().get_queryset()
         query = self.request.GET.get('title')
         if query:
-            queryset = queryset.filter(title__iregex=query)
+            queryset = queryset.filter(title__iregex=query, is_available=True)
         return queryset
 
     def get_context_data(self, *, object_list=None, **kwargs):
@@ -177,15 +181,23 @@ def order_create(request):
             orders = form.save(commit=False)
             orders.user = request.user
             order = form.save()
-            for item in cart:
-                CartOrderItem.objects.create(order=order,
-                                         product=item['product'],
-                                         price=item['price'],
-                                         qty=item['quantity'])
 
-            # очистка корзины
+            cart_items = list(cart)
+
+            for item in cart_items:
+                product = get_object_or_404(Product, slug=item['product'].slug)
+                if product.quantity >= item['quantity']:
+                    CartOrderItem.objects.create(order=order,
+                                                 product=item['product'],
+                                                 price=item['price'],
+                                                 qty=item['quantity'])
+                    product.quantity -= item['quantity']
+                    product.save()
+                else:
+                    pass
+
             cart.clear()
-            total = sum(Decimal(item['price']) * item['quantity'] for item in cart)
+            total = sum(Decimal(item['price']) * item['quantity'] for item in cart_items)
             payment = Payment.create({
                 "amount": {
                     "value": total,
@@ -193,7 +205,7 @@ def order_create(request):
                 },
                 "confirmation": {
                     "type": "redirect",
-                    "return_url": "https://kitten-classic-abnormally.ngrok-free.app/order_succeeded"
+                    "return_url": f"{os.getenv('CSRF_TRUSTED_ORIGINS')}/order_succeeded"
                 },
                 "capture": True,
                 "description": f'Ваш номер заказа {CartOrder.objects.filter(user=request.user).last().id}'
@@ -213,9 +225,7 @@ class Webhooks(ListView):
 
     def post(self, request, *args, **kwargs):
         response = json.loads(request.body)
-        print(response)
         cartorder_id = CartOrder.objects.last().id
-        print(cartorder_id)
         if payment_acceptance(response, cartorder_id=cartorder_id):
             return HttpResponse(200)
         return HttpResponse(404)

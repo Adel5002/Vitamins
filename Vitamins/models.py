@@ -133,7 +133,7 @@ class CartOrder(models.Model):
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
     paid = models.BooleanField('Статус платежа', default=False)
-    phone_number = models.BigIntegerField('Номер телефона', null=True)
+    phone_number = models.BigIntegerField('Номер телефона')
     track_number = models.CharField('Трекномер', max_length=120, null=True, blank=True)
 
     class Meta:
