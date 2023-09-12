@@ -5,6 +5,7 @@ from .models import *
 
 class ProductAdmin(admin.ModelAdmin):
     prepopulated_fields = {'slug': ('title',)}
+    list_filter = ['is_available']
 
 
 class CategoryAdmin(admin.ModelAdmin):

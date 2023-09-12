@@ -26,6 +26,8 @@ class Cart(object):
                                      'price': str(product.price)}
         if update_quantity:
             self.cart[product_slug]['quantity'] = quantity
+        elif self.cart[product_slug]['quantity'] >= product.quantity:
+            pass
         else:
             self.cart[product_slug]['quantity'] += quantity
         self.save()

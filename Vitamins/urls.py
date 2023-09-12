@@ -4,7 +4,7 @@ from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.cache import cache_page
 
 from .views import ProdictList, ProductDetails, AddComment, cart_detail, cart_add, cart_remove, CategoryListView, \
-    cart_subtract, SearchProducts, AboutUs, order_create, Webhooks, OrderAcceptance, UserOrders
+    cart_subtract, SearchProducts, AboutUs, order_create, Webhooks, OrderAcceptance, UserOrders, cart_update_quantity
 
 
 # app_name = 'Vitamins'
@@ -19,7 +19,7 @@ urlpatterns = [
 
     path('cart_detail', cart_detail, name='cart_detail'),
     path('cart_detail/add/<slug:product_slug>/', cart_add, name='cart_add'),
-    path('cart_detail/update/<slug:product_slug>/', cart_add, name='cart_update'),
+    path('cart_detail/update/<slug:product_slug>/', cart_update_quantity, name='cart_update'),
     path('cart_detail/subtract/<slug:product_slug>/', cart_subtract, name='cart_subtract'),
     path('cart_detail/remove/<slug:product_slug>/', cart_remove, name='cart_remove'),
 

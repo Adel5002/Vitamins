@@ -8,7 +8,7 @@ from django.views.decorators.http import require_POST
 from django.db.models import Avg, F, Sum
 from django.shortcuts import get_object_or_404, redirect, render, HttpResponseRedirect, HttpResponse
 from django.core.paginator import Paginator
-from django.http import QueryDict
+from django.http import QueryDict, JsonResponse
 
 from yookassa import Configuration, Payment, Settings
 from decimal import Decimal
@@ -136,10 +136,10 @@ def cart_update_quantity(request, product_slug):
     cart = Cart(request)
     product = get_object_or_404(Product, slug=product_slug)
 
+
     if request.method == 'POST':
         quantity = int(request.POST['quantity'])
-        cart.update(product=product, quantity=quantity)
-
+        cart.add(product=product, quantity=quantity)
     return redirect('cart_detail')
 
 
@@ -192,6 +192,9 @@ def order_create(request):
                                                  price=item['price'],
                                                  qty=item['quantity'])
                     product.quantity -= item['quantity']
+                    product.save()
+                if product.quantity == 0:
+                    product.is_available = False
                     product.save()
                 else:
                     pass
