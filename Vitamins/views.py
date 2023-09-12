@@ -50,7 +50,9 @@ class ProductDetails(DetailView):
         comments = Comment.objects.filter(product=self.object).order_by('id')
         paginator = Paginator(comments, self.comments_paginate_by)
         page_number = self.request.GET.get('page')
+        com_form = CommentForm
 
+        context['com_form'] = com_form
         context['comments'] = paginator.get_page(page_number)
         context['cart_product_form'] = cart_product_form
         context['avg_rating'] = avg_rating
@@ -108,7 +110,7 @@ class AboutUs(TemplateView):
 class AddComment(CreateView):
     model = Comment
     form_class = CommentForm
-    template_name = 'add_comment.html'
+    template_name = 'product_details.html'
 
     def form_valid(self, form):
         form.instance.product = Product.objects.get(slug=self.kwargs['slug'])
