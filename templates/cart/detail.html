@@ -14,7 +14,7 @@
                       </div>
                             <div class="item">
                                 <div class="image">
-                                  <img src="{{ product.image.url }}" alt="" />
+                                    <a href="{% url 'product_details' product.slug %}"><img src="{{ product.image.url }}" alt="" /></a>
                                 </div>
 
                                 <div class="description">
@@ -29,7 +29,6 @@
                                         <input type="hidden" name="quantity" value="1">
                                         <input type="hidden" id="product-slug" value="{{ product.slug }}">
                                         <button type="submit" class="btns btn-link p-0 text-info"><i class="fas fa-plus"></i></button>
-                                        {{ form.errors }}
                                     </form>
                                     <input type="text" name="name" value="{{ item.quantity }}">
                                     <form action="{% url 'cart_subtract' product.slug %}" method="POST">
