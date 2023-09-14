@@ -25,7 +25,7 @@ def send_notify(instance_id):
             phone_number = instance.phone_number
             subject = 'Новый оплаченный заказ!'
 
-            email = settings.ADMIN
+            email = settings.OWNER
             template = 'html_messages/paid_order.html'
 
         else:

@@ -9,14 +9,20 @@
             <div class="product-box mt-5">
             <div class="product-inner-box position-relative">
                 <a href="{{ product.get_absolute_url }}"><img src="{{ product.image.url }}" class="image-fluid" alt=""></a>
-                <form action="{% url 'cart_add' product.slug %}" method="post">
-                    {% csrf_token %}
-                    {{ cart_product_form.update }}
-                    <div style="display: none;">{{ cart_product_form.quantity }}</div>
+                {% if product.is_available %}
+                    <form action="{% url 'cart_add' product.slug %}" method="post">
+                        {% csrf_token %}
+                        {{ cart_product_form.update }}
+                        <div style="display: none;">{{ cart_product_form.quantity }}</div>
+                        <div class="cart-btn">
+                            <button class="btn bg-white shadow-sm rounded-pill">Добавить в корзину</button>
+                        </div>
+                    </form>
+                    {% else %}
                     <div class="cart-btn">
-                        <button class="btn bg-white shadow-sm rounded-pill">Добавить в корзину</button>
+                        <button disabled class="btn bg-white shadow-sm rounded-pill">Добавить в корзину</button>
                     </div>
-                </form>
+                    {% endif %}
                 <div class="product-info">
                     <div class="product_name">
                         <h3>{{ product.title }}</h3>

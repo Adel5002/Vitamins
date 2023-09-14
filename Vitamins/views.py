@@ -9,6 +9,7 @@ from django.db.models import Avg, F, Sum
 from django.shortcuts import get_object_or_404, redirect, render, HttpResponseRedirect, HttpResponse
 from django.core.paginator import Paginator
 from django.http import QueryDict, JsonResponse
+from django.contrib.auth.models import User
 
 from yookassa import Configuration, Payment, Settings
 from decimal import Decimal
@@ -32,9 +33,7 @@ class ProdictList(ListView):
         context['cart_product_form'] = cart_product_form
         return context
 
-    def get_queryset(self):
-        queryset = Product.objects.filter(is_available=True)
-        return queryset
+
 
 
 class ProductDetails(DetailView):
@@ -68,7 +67,7 @@ class CategoryListView(ListView):
     def get_queryset(self):
         slug = self.kwargs['slug']
         category = get_object_or_404(Category, slug=slug)
-        return Product.objects.filter(categories=category, is_available=True)
+        return Product.objects.filter(categories=category)
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -88,7 +87,7 @@ class SearchProducts(ListView):
         queryset = super().get_queryset()
         query = self.request.GET.get('title')
         if query:
-            queryset = queryset.filter(title__iregex=query, is_available=True)
+            queryset = queryset.filter(title__iregex=query)
         return queryset
 
     def get_context_data(self, *, object_list=None, **kwargs):
@@ -202,6 +201,7 @@ def order_create(request):
                     pass
 
             cart.clear()
+            order_id = CartOrder.objects.filter(user=request.user).last().id
             total = sum(Decimal(item['price']) * item['quantity'] for item in cart_items)
             payment = Payment.create({
                 "amount": {
@@ -212,8 +212,11 @@ def order_create(request):
                     "type": "redirect",
                     "return_url": f"{os.getenv('CSRF_TRUSTED_ORIGINS')}/order_succeeded"
                 },
+                "metadata": {
+                    'order_id': order_id,
+                },
                 "capture": True,
-                "description": f'Ваш номер заказа {CartOrder.objects.filter(user=request.user).last().id}'
+                "description": f'Ваш номер заказа {order_id}'
                 }, uuid.uuid4())
             return HttpResponseRedirect(payment.confirmation.confirmation_url)
 
@@ -230,8 +233,7 @@ class Webhooks(ListView):
 
     def post(self, request, *args, **kwargs):
         response = json.loads(request.body)
-        cartorder_id = CartOrder.objects.last().id
-        if payment_acceptance(response, cartorder_id=cartorder_id):
+        if payment_acceptance(response):
             return HttpResponse(200)
         return HttpResponse(404)
 

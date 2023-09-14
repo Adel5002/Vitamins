@@ -13,10 +13,14 @@
         <div class="col-sm-7 infinite-item">
             <h3 class="searched-title mt-4">{{ product.title }}</h3>
             <div class="main-information mt-3">
+                {% if product.is_available %}
+                <p>Статус:&nbsp;<strong>В наличии</strong></p>
+                {% else %}
+                <p>Статус:&nbsp;<strong>Нет наличии</strong></p>
+                {% endif %}
                 <p>Производитель:&nbsp;<strong> {{ product.vendor }}</strong></p>
                 <p>Форма выпуска::&nbsp;<strong> {{ product.release_form }}</strong></p>
                 <p>Возраст от:&nbsp;<strong> {{ product.age }}+</strong></p>
-                <p>Страна выпуска:&nbsp;<strong> {{ product.country }}</strong></p>
             </div>
         </div>
         <div class="col-sm-2 infinite-item">
@@ -29,6 +33,7 @@
                     <strong>{{ product.price }} ₽</strong>
                 {% endif %}
                 <hr>
+                {% if product.is_available %}
                     <form action="{% url 'cart_add' product.slug %}" method="post">
                         {% csrf_token %}
                         {{ cart_product_form.update }}
@@ -37,6 +42,11 @@
                             <button class="btn btn-success">Добавить в корзину</button>
                         </div>
                     </form>
+                {% else %}
+                <div class="mt-3 d-grid gap-2">
+                    <button disabled class="btn btn-success">Добавить в корзину</button>
+                </div>
+                {% endif %}
             </div>
         </div>
         <hr class="searched-hr">

@@ -11,6 +11,11 @@
             <h1 class="searched-title">{{ product.title }}</h1>
 
             <div class="main-information mt-5">
+                {% if product.is_available %}
+                <p>Статус:&nbsp;<strong>В наличии</strong></p>
+                {% else %}
+                <p>Статус:&nbsp;<strong>Нет наличии</strong></p>
+                {% endif %}
                 <p>Осталось:&nbsp;<strong>{{ product.quantity }} шт.</strong></p>
                 <p>Производитель:&nbsp;<strong> {{ product.vendor }}</strong></p>
                 <p>Форма выпуска:&nbsp;<strong> {{ product.release_form }}</strong></p>
@@ -29,6 +34,7 @@
                 {% endif %}
                 <hr>
                 <div class="mt-3 d-grid gap-2">
+                    {% if product.is_available %}
                     <form action="{% url 'cart_add' product.slug %}" method="post">
                         {% csrf_token %}
                         {{ cart_product_form.update }}
@@ -37,11 +43,16 @@
                             <button class="btn btn-success">Добавить в корзину</button>
                         </div>
                     </form>
+                    {% else %}
+                    <div class="mt-3 d-grid gap-2">
+                        <button disabled class="btn btn-success">Добавить в корзину</button>
+                    </div>
+                    {% endif %}
                 </div>
             </div>
         </div>
     </div>
-    <div class="row product-main-info  pt-5 pb-5 mt-5 ">
+    <div class="row product-main-info pt-5 pb-5 mt-5 ">
         <div class="col-sm">
             <button id="descr-btn" class="btn btn-outline-dark ms-2">Описание</button>
             <button id="specifications-btn" class="btn btn-outline-dark ms-2 me-2">Состав</button>
@@ -58,7 +69,7 @@
                 <form action="{% url 'add_comment' product.slug %}" method="post">
                 {% csrf_token %}
                     <textarea class="form-control" name="body" id="" cols="30" rows="10"></textarea>
-                    <div class=" mt-3">{{ com_form.rating }}</div>
+                    <div class=" mt-3">{{ comment_form.rating }}</div>
                     <button type="submit" class="mt-3 btn btn-primary">Добавить комментарий</button>
                 </form>
                 {% else %}

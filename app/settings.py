@@ -121,7 +121,7 @@ EMAIL_USE_SSL = True
 
 WSGI_APPLICATION = 'app.wsgi.application'
 
-ADMIN = os.getenv('ADMIN')
+OWNER = os.getenv('OWNER')
 
 LOGIN_REDIRECT_URL = "/"
 
