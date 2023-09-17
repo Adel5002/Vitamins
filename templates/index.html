@@ -1,7 +1,9 @@
 {% extends 'base.html' %}
+{% load cache %}
 
 
 {% block content %}
+{% cache 300 index request.user.username page_obj %}
 <div class="container">
     <div class="row infinite-container">
         {% for product in products %}
@@ -38,5 +40,6 @@
     </div>
 {% include 'infinite_scroll.html' %}
 </div>
-
+{% endcache %}
 {% endblock %}
+

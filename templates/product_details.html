@@ -1,8 +1,9 @@
 {% extends 'base.html' %}
-
+{% load cache %}
 
 {% block content %}
 <div class="container">
+    {% cache 300 details request.user.username product.slug %}
     <div class="row product-main-info mt-3 pt-5 pb-5 ">
         <div class="col-sm-3 img-container">
             <img class="product-detail-img" src="{{ product.image.url }}" alt="">
@@ -52,6 +53,7 @@
             </div>
         </div>
     </div>
+    {% endcache %}
     <div class="row product-main-info pt-5 pb-5 mt-5 ">
         <div class="col-sm">
             <button id="descr-btn" class="btn btn-outline-dark ms-2">Описание</button>

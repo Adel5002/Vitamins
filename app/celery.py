@@ -11,7 +11,7 @@ app.autodiscover_tasks()
 app.conf.beat_schedule = {
     'delete_cache_every_hour': {
         'task': 'Vitamins.tasks.delete_not_actual_caches',
-        'schedule': crontab(minute='*/60'),
+        'schedule': crontab(),
 
     }
 }
