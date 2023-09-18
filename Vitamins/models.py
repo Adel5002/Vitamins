@@ -28,8 +28,6 @@ class Category(models.Model):
 
     def save(self, *args, **kwargs):
         self.slug = slugify(unidecode(self.name))
-        print(f'{self.slug = }')
-        print(f'{self.name = }')
         super(Category, self).save(*args, **kwargs)
 
     def __str__(self):

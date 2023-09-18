@@ -42,22 +42,23 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.sites',
+    'django.contrib.sitemaps',
     'django.contrib.staticfiles',
 
 
-    #my-applications
+    # my-applications
     'Vitamins',
 
-    #registration
+    # registration
     'allauth',
     'allauth.account',
     'allauth.socialaccount',
 
-    #allauth-styles
+    # allauth-styles
     'crispy_forms',
     'crispy_bootstrap5',
 
-    #font-awesome
+    # font-awesome
     'fontawesomefree',
 
     # django-filters
@@ -65,6 +66,9 @@ INSTALLED_APPS = [
 
     # django-celery-beat
     'django_celery_beat',
+
+    # django-compressor
+    'compressor',
 
 ]
 
@@ -187,9 +191,18 @@ STATIC_URL = 'static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
+STATICFILES_FINDERS = (
+    'django.contrib.staticfiles.finders.FileSystemFinder',
+    'django.contrib.staticfiles.finders.AppDirectoriesFinder',
+    'compressor.finders.CompressorFinder',
+)
+
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'static')
 ]
+
+COMPRESS_ROOT = 'comp/'
+COMPRESS_ENABLED = True
 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_URL = '/media/'

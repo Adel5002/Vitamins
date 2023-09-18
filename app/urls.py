@@ -15,16 +15,26 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path, include
-
+from django.urls import path, include, re_path
 from django.conf import settings
 from django.conf.urls.static import static
+from django.views.generic import TemplateView
+
 from Vitamins.views import PageNotFoundErrorView, ServerErrorView
+from .sitemaps import ProductSitemap
+from django.contrib.sitemaps.views import sitemap
+
+sitemaps = {
+    'products': ProductSitemap
+}
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('accounts/', include('allauth.urls')),
     path('', include('Vitamins.urls')),
+    re_path(r'^robots\.txt$', TemplateView.as_view(template_name="Seo_things/robots.txt", content_type='text/plain')),
+    re_path(r'^sitemap\.xml$', sitemap, {'sitemaps': sitemaps},
+            name='django.contrib.sitemaps.views.sitemap')
 ]
 
 handler404 = PageNotFoundErrorView.as_view()

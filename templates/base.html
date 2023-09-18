@@ -6,89 +6,107 @@
     <meta name="viewport"
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <meta name="description" property="og:description" content="Витамины из Турции не значит дорого. Добро пожаловать в наш магазин!">
+    <meta property="og:image" content="https://img.freepik.com/free-vector/essential-vitamin-and-mineral-complex_52683-35723.jpg?w=1380&t=st=1694964704~exp=1694965304~hmac=926d57fbd7f2d722529d8c76eac9a2dd695bc280da62a577c6669745be40e9bb">
+    <meta name="description" content="Купите витамины в Казани по выгодным ценам. Большой выбор витаминов для здоровья и энергии.">
+    <meta name="description" content="Качественные витамины из Турции. Полезные добавки для поддержания вашего здоровья. Закажите витамины из Турции прямо сейчас.">
+    <meta name="description" content="Найдите витамины по хорошей цене в нашем магазине. Большой выбор доступных вариантов для укрепления вашего здоровья.">
+    <meta name="keywords" content="Витамины, Казань, Здоровье, Аптека, Купить, Выгодные цены, Добавки">
+    <meta name="keywords" content="Витамины, Турция, Зарубежные, Качество, Купить, Выгодные цены, Полезные добавки, Поддержка здоровья, Заказать">
+    <meta name="keywords" content="Витамины, Цена, Здоровье, Доступный выбор, Покупка, Скидки, Акции">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    {% load compress %}
+    {% compress css %}
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
     <link rel="stylesheet" href="{% static 'css/modal.css' %}">
+    {% endcompress %}
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="{% static 'fontawesomefree/css/fontawesome.css' %}" rel="stylesheet" type="text/css">
     <link href="{% static 'fontawesomefree/css/brands.css' %}" rel="stylesheet" type="text/css">
     <link href="{% static 'fontawesomefree/css/solid.css' %}" rel="stylesheet" type="text/css">
+    <link rel="icon" href="{% static 'img/vitamin-c.png' %}">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-    <title>{% block title %}{% endblock %}</title>
+    <title>{% block title %}Витамины в Казани{% endblock %}</title>
 </head>
 <body>
 
 {% block header %}
-        <nav class="main-pg navbar navbar-expand-lg navbar-light">
-            <div class="container">
-                <a href="{% url 'main' %}" class="navbar-brand">X-YRO 2005</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent"
-                    aria-controls="navbarContent" aria-expanded="false">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="collapse navbar-collapse" id="navbarContent">
-                    <ul class="navbar-nav ms-auto mb-2">
-                        <li class="nav-item">
-                            <a href="{% url 'main' %}" class="nav-link">Домашняя</a>
-                        </li>
-                    <li class="nav-item dropdown">
-                    <li class="nav-item dropdown">
-                              <a class="nav-link dropdown-toggle" href="#" id="navbarDarkDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                Категории
-                              </a>
-                              <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="navbarDarkDropdownMenuLink">
-                                  {% for category in categories %}
-                                        <li><a class="dropdown-item" href="{% url 'category_products' category.slug %}">{{ category.name }}</a></li>
-                                  {% endfor %}
-                              </ul>
+        <header>
+            <nav class="main-pg navbar navbar-expand-lg navbar-light">
+                <div class="container">
+                    <a href="{% url 'main' %}" class="navbar-brand">X-YRO 2005</a>
+                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent"
+                        aria-controls="navbarContent" aria-expanded="false">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+                    <div class="collapse navbar-collapse" id="navbarContent">
+                        <ul class="navbar-nav ms-auto mb-2">
+                            <li class="nav-item">
+                                <a href="{% url 'main' %}" class="nav-link">Домашняя</a>
                             </li>
-                        <li class="nav-item">
-                            <a href="{% url 'about_us' %}" class="nav-link">О нас</a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="https://t.me/xyro2005" class="nav-link">Сайты на заказ</a>
-                        </li>
+                        <li class="nav-item dropdown">
+                        <li class="nav-item dropdown">
+                                  <a class="nav-link dropdown-toggle" href="#" id="navbarDarkDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                    Категории
+                                  </a>
+                                  <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="navbarDarkDropdownMenuLink">
+                                      {% for category in categories %}
+                                            <li><a class="dropdown-item" href="{% url 'category_products' category.slug %}">{{ category.name }}</a></li>
+                                      {% endfor %}
+                                  </ul>
+                                </li>
+                            <li class="nav-item">
+                                <a href="{% url 'about_us' %}" class="nav-link">О нас</a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="https://t.me/xyro2005" class="nav-link">Сайты на заказ</a>
+                            </li>
 
-                        <form action="{% url 'search_results' %}" method="get">
-                            <div class="search">
-                            <div class="icon"></div>
-                                <div class="input">
-                                    <input name="title" type="text"  placeholder="Поиск" id="mySearch">
-                                </div>
-                                <span class="clear"></span>
-                        </div>
-                        </form>
-                    </ul>
-                    <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
-                    {% if request.user.is_authenticated %}
-                        <form method="post" action="{% url 'account_logout' %}">
-                          {% csrf_token %}
-                          {% if redirect_field_value %}
-                          <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}"/>
-                          {% endif %}
+                            <form action="{% url 'search_results' %}" method="get">
+                                <div class="search">
+                                <div class="icon"></div>
+                                    <div class="input">
+                                        <input name="title" type="text"  placeholder="Поиск" id="mySearch">
+                                    </div>
+                                    <span class="clear"></span>
+                            </div>
+                            </form>
+                        </ul>
+                        <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+                        {% if request.user.is_authenticated %}
+                            <form method="post" action="{% url 'account_logout' %}">
+                              {% csrf_token %}
+                              {% if redirect_field_value %}
+                              <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}"/>
+                              {% endif %}
 
-                            <a href="{% url 'user_orders' %}">{{ user.username }}</a> | <button class="me-2 nav-item sign-out" type="submit">Выход</button>
+                                <a href="{% url 'user_orders' %}">{{ user.username }}</a> | <button class="me-2 nav-item sign-out" type="submit">Выход</button>
+                                <a style="color: black;" href="{% url 'cart_detail' %}"><i class="fa-solid fa-cart-shopping"></i></a>
+                            </form>
+                        {% else %}
+                          <li class="nav-but">
+                            <a href="{% url 'account_login'%}" class="me-1 btn btn-outline-dark">Войти</a>
+                            <a href="{% url 'account_signup' %}" class="me-2 btn btn-outline-dark">Регистрация</a>
                             <a style="color: black;" href="{% url 'cart_detail' %}"><i class="fa-solid fa-cart-shopping"></i></a>
-                        </form>
-                    {% else %}
-                      <li class="nav-but">
-                        <a href="{% url 'account_login'%}" class="me-1 btn btn-outline-dark">Войти</a>
-                        <a href="{% url 'account_signup' %}" class="me-2 btn btn-outline-dark">Регистрация</a>
-                        <a style="color: black;" href="{% url 'cart_detail' %}"><i class="fa-solid fa-cart-shopping"></i></a>
-                      </li>
-                    {% endif %}
-                    </ul>
+                          </li>
+                        {% endif %}
+                        </ul>
+                    </div>
                 </div>
-            </div>
-        </nav>
+            </nav>
+        </header>
 {% endblock %}
 
 {% block content %}{% endblock %}
 
-
+{% compress js %}
 <script src="{% static 'js/jquery.waypoints.min.js' %}"></script>
 <script src="{% static 'js/infinite.min.js' %}"></script>
+<script src="{% static 'js/script.js' %}"></script>
+<script src="{% static 'js/prod_details.js' %}"></script>
+<script src="{% static 'js/modal.js' %}"></script>
+{% endcompress %}
 <script>
         var infinite = new Waypoint.Infinite({
             element: $('.infinite-container')[0],
@@ -104,10 +122,6 @@
 
         });
 </script>
-
-<script src="{% static 'js/script.js' %}"></script>
-<script src="{% static 'js/prod_details.js' %}"></script>
-<script src="{% static 'js/modal.js' %}"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
 </body>
 </html>

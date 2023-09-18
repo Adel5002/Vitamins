@@ -1,6 +1,8 @@
 {% extends 'base.html' %}
 {% load cache %}
 
+{% block title %}{{ product.title }}{% endblock %}
+
 {% block content %}
 <div class="container">
     {% cache 300 details request.user.username product.slug %}

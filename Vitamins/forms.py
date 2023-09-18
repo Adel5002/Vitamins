@@ -15,7 +15,6 @@ class CommentForm(forms.ModelForm):
         fields = ['body', 'rating']
 
 
-
 PRODUCT_QUANTITY_CHOICES = [(i, str(i)) for i in range(1, 10)]
 
 
