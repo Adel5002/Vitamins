@@ -5,11 +5,10 @@ import os
 from django.views.generic import DetailView, ListView, CreateView, TemplateView
 from django.urls import reverse
 from django.views.decorators.http import require_POST
-from django.db.models import Avg, F, Sum
+from django.db.models import Avg, F, Sum, Q, Count
 from django.shortcuts import get_object_or_404, redirect, render, HttpResponseRedirect, HttpResponse
 from django.core.paginator import Paginator
-from django.http import QueryDict, JsonResponse
-from django.contrib.auth.models import User
+
 
 from yookassa import Configuration, Payment, Settings
 from decimal import Decimal
@@ -18,6 +17,7 @@ from .payment_acceptance import payment_acceptance
 from .cart import Cart
 from .models import Product, Comment, Category, CartOrderItem
 from .forms import CommentForm, CartAddProductForm, CartSubtractProductForm, OrderCreateForm, CartOrder
+from .mixins import SuperuserRequiredMixin
 
 
 
@@ -268,4 +268,16 @@ class ServerErrorView(TemplateView):
 
     def get(self, request, *args, **kwargs):
         return render(request, self.template_name, status=500)
+
+
+class Chart(SuperuserRequiredMixin, ListView):
+    model = CartOrderItem
+    template_name = 'charts/chart.html'
+    context_object_name = 'products'
+
+    def get_queryset(self):
+        queryset = CartOrderItem.objects.filter(order__paid=True).values('product__title').annotate(
+            qt=Sum('qty'))
+        print(queryset)
+        return queryset
 

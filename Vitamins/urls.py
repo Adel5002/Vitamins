@@ -4,7 +4,8 @@ from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.cache import cache_page
 
 from .views import ProdictList, ProductDetails, AddComment, cart_detail, cart_add, cart_remove, CategoryListView, \
-    cart_subtract, SearchProducts, AboutUs, order_create, Webhooks, OrderAcceptance, UserOrders, cart_update_quantity
+    cart_subtract, SearchProducts, AboutUs, order_create, Webhooks, OrderAcceptance, UserOrders, cart_update_quantity, \
+    Chart
 
 
 # app_name = 'Vitamins'
@@ -27,4 +28,6 @@ urlpatterns = [
     path('webhooks', csrf_exempt(Webhooks.as_view())),
     path('order_succeeded', OrderAcceptance.as_view()),
     path('user_orders', UserOrders.as_view(), name='user_orders'),
+
+    path('chart', Chart.as_view(), name='chart')
 ]

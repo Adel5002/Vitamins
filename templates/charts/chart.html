@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container">
+    <div class="row">
+        <div class="">
+            <h1 class="text-center">Продажи продуктов</h1>
+            <div>
+                <canvas id="myChart"></canvas>
+            </div>
+
+            <script>
+              const ctx = document.getElementById('myChart');
+
+              new Chart(ctx, {
+                type: 'bar',
+                data: {
+                  labels: [{% for product in products %} '{{ product.product__title }}', {% endfor %}],
+                  datasets: [{
+                    label: '# Продано',
+                    data: [{% for product in products %} {{ product.qt }}, {% endfor %}],
+                    borderWidth: 1
+                  }]
+                },
+                options: {
+                  scales: {
+                    y: {
+                      beginAtZero: true
+                    }
+                  }
+                }
+              });
+            </script>
+        </div>
+    </div>
+</div>
+{% endblock %}

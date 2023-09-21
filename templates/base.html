@@ -27,6 +27,7 @@
     <link href="{% static 'fontawesomefree/css/solid.css' %}" rel="stylesheet" type="text/css">
     <link rel="icon" href="{% static 'img/vitamin-c.png' %}">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <title>{% block title %}Витамины в Казани{% endblock %}</title>
 </head>
 <body>
@@ -42,6 +43,11 @@
                     </button>
                     <div class="collapse navbar-collapse" id="navbarContent">
                         <ul class="navbar-nav ms-auto mb-2">
+                            {% if request.user.is_superuser %}
+                            <li class="nav-item">
+                                <a href="{% url 'chart' %}" class="nav-link">Таблица</a>
+                            </li>
+                            {% endif %}
                             <li class="nav-item">
                                 <a href="{% url 'main' %}" class="nav-link">Домашняя</a>
                             </li>

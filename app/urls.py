@@ -33,8 +33,12 @@ urlpatterns = [
     path('accounts/', include('allauth.urls')),
     path('', include('Vitamins.urls')),
     re_path(r'^robots\.txt$', TemplateView.as_view(template_name="Seo_things/robots.txt", content_type='text/plain')),
-    re_path(r'^sitemap\.xml$', sitemap, {'sitemaps': sitemaps},
-            name='django.contrib.sitemaps.views.sitemap')
+    path(
+        "sitemap.xml",
+        sitemap,
+        {"sitemaps": sitemaps},
+        name="django.contrib.sitemaps.views.sitemap",
+    )
 ]
 
 handler404 = PageNotFoundErrorView.as_view()

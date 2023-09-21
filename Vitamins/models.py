@@ -154,7 +154,7 @@ class CartOrder(models.Model):
 
 class CartOrderItem(models.Model):
     order = models.ForeignKey(CartOrder, on_delete=models.SET_NULL, null=True)
-    product = models.ForeignKey(Product, on_delete=models.SET_NULL, null=True)
+    product = models.ForeignKey(Product, on_delete=models.CASCADE)
     qty = models.PositiveIntegerField('Количество', default=1)
     price = models.DecimalField('Цена', max_digits=10, decimal_places=2)
     date_added = models.DateTimeField(auto_now_add=True)
